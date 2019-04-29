@@ -5,24 +5,24 @@ public class Bullet {
     private double x;
     private double y;
     private double range;
-    private double speedX;
-    private double speedY;
+    private double BXVel;
+    private double BYVel;
     private double size;
 
-    public Bullet(double initX, double initY, double range, double speedX, double speedY, double size) {
+    public Bullet(double initX, double initY, double range, double BXVel, double BYVel, double size) {
         this.initX = initX;
         this.initY = initY;
         x = initX;
         y = initY;
         this.range = range;
-        this.speedX = speedX;
-        this.speedY = speedY;
+        this.BXVel = BXVel;
+        this.BYVel =BYVel;
         this.size = size;
     }
 
     public void travel() {
-        x += speedX;
-        y += speedY;
+        x += BXVel;
+        y += BYVel;
     }
 
     public boolean expire() {

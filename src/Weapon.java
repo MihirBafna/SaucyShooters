@@ -22,9 +22,9 @@ public class Weapon {
     public void shoot(double x, double y, Player player) {
         double xDiff = x - player.getX();
         double yDiff = y - player.getY();
-        double xDiffAbs = Math.abs(xDiff);
-        double yDiffAbs = Math.abs(yDiff);
-        double angle = Math.atan(yDiffAbs / xDiffAbs);
+        // double xDiffAbs = Math.abs(xDiff);
+        // double yDiffAbs = Math.abs(yDiff);
+        double angle = Math.atan(yDiff/ xDiff);
         double bulletSpeedX = bulletSpeed * Math.cos(angle);
         double bulletSpeedY = bulletSpeed * Math.sin(angle);
 
