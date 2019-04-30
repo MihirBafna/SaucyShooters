@@ -24,7 +24,7 @@ public class Weapon {
         double yDiff = y - player.getY();
         // double xDiffAbs = Math.abs(xDiff);
         // double yDiffAbs = Math.abs(yDiff);
-        double angle = Math.atan(yDiff/ xDiff);
+        double angle = Math.atan2(yDiff,xDiff);
         double bulletSpeedX = bulletSpeed * Math.cos(angle);
         double bulletSpeedY = bulletSpeed * Math.sin(angle);
 
@@ -33,9 +33,10 @@ public class Weapon {
     }
 
     public void rangeDrop() {
-        for (Bullet b : bullets) {
-            if (b.expire()) {
-                bullets.remove(b);
+        for(int i=0;i<bullets.size();i++){
+            if(bullets.get(i).expire()){
+                bullets.remove(i);
+                i--;
             }
         }
 
