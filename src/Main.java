@@ -17,8 +17,8 @@ public class Main implements ActionListener, KeyListener, MouseMotionListener {
     public static int screenheight = 600;
     private static enum State { MENU, GAME, WON};
     private static State state = State.MENU;
-    private JFrame screen = new JFrame();
-    private JFrame menu = new JFrame("Saucy Shooters");
+    private JFrame screen;
+    private JFrame menu = new JFrame();
     private int whichSong;
 
 
@@ -29,10 +29,7 @@ public class Main implements ActionListener, KeyListener, MouseMotionListener {
 
     public Main(){
         if(state == State.MENU){
-            menu();
-        }
-        if(state== State.GAME){
-            game();
+           Main main = new Main();
         }
     }
 
