@@ -79,8 +79,8 @@ public class Weapon {
                     double bulletSpeedX = bulletSpeed * Math.cos(theta);
                     double bulletSpeedY = bulletSpeed * Math.sin(theta);
                     if (magazine > 0) {
-                        Bullet b = new Bullet(player.getX(), player.getY(), range, rangeFallOff, damage, damageFallOff, bulletSpeedX, bulletSpeedY,
-                                bulletSize);
+                        Bullet b = new Bullet(player.getX(), player.getY(), range, rangeFallOff, damage, damageFallOff,
+                                bulletSpeedX, bulletSpeedY, bulletSize);
                         bullets.add(b);
                         magazine--;
                     }
