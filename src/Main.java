@@ -15,28 +15,35 @@ import javax.swing.JLabel;
 public class Main implements ActionListener, KeyListener, MouseMotionListener {
     public static int screenwidth = 1000;
     public static int screenheight = 600;
-    private static State state = State.MENU;
     private static enum State { MENU, GAME, WON};
-    private JFrame screen;
-    private JFrame menu;
+    private static State state = State.MENU;
+    private JFrame screen = new JFrame();
+    private JFrame menu = new JFrame("Saucy Shooters");
     private int whichSong;
 
 
     @SuppressWarnings("unused")
     public static void main(String[] args) {
-        if(state == State.MENU){
-            Main main = new Main();
-        }
+        Main main = new Main();
     }
 
     public Main(){
+        if(state == State.MENU){
+            menu();
+        }
+        if(state== State.GAME){
+            game();
+        }
+    }
+
+    public void menu(){
         // added JLables
-        JLabel background = new JLabel(new ImageIcon("images/nightbackground.png")); // image from
+        JLabel background = new JLabel(new ImageIcon("img/nightbackground.png")); // image from
                                                                                      // https://www.vectorstock.com/royalty-free-vector/cartoon-game-background-vector-7926680
-        JLabel title = new JLabel(new ImageIcon("images/saucysoccerlogo.png"));
-        JLabel music = new JLabel(new ImageIcon("images/saucymusic.png"));
-        JLabel controls = new JLabel(new ImageIcon("images/controls.png"));
-        JLabel settings = new JLabel(new ImageIcon("images/settings.png"));
+        JLabel title = new JLabel(new ImageIcon("img/saucysoccerlogo.png"));
+        JLabel music = new JLabel(new ImageIcon("img/saucymusic.png"));
+        JLabel controls = new JLabel(new ImageIcon("img/controls.png"));
+        JLabel settings = new JLabel(new ImageIcon("img/settings.png"));
         JButton playbutton = new JButton();
         JButton controlsbutton = new JButton();
         JButton settingsbutton = new JButton();
@@ -52,11 +59,11 @@ public class Main implements ActionListener, KeyListener, MouseMotionListener {
         music1.setVisible(false);
         music2.setVisible(false);
         music3.setVisible(false);
-        backbutton.setIcon(new ImageIcon("images/backbutton1.png"));
-        forkbutton.setIcon(new ImageIcon("images/githublogo.png"));
-        playbutton.setIcon(new ImageIcon("images/playbutton.png"));
-        controlsbutton.setIcon(new ImageIcon("images/controlsbutton.png"));
-        settingsbutton.setIcon(new ImageIcon("images/settingsbutton.png"));
+        backbutton.setIcon(new ImageIcon("img/backbutton1.png"));
+        forkbutton.setIcon(new ImageIcon("img/githublogo.png"));
+        playbutton.setIcon(new ImageIcon("img/playbutton.png"));
+        controlsbutton.setIcon(new ImageIcon("img/controlsbutton.png"));
+        settingsbutton.setIcon(new ImageIcon("img/settingsbutton.png"));
         title.setBounds(screenwidth / 2 - 200, 20, 400, 200);
         background.setBounds(0, 0, screenwidth, screenheight);
         playbutton.setBounds(screenwidth / 2 - 80, 240, 160, 80);
@@ -100,7 +107,7 @@ public class Main implements ActionListener, KeyListener, MouseMotionListener {
         menu.add(background);
         menu.pack();
         menu.setSize(screenwidth, screenheight);
-        menu.setTitle("Saucy Soccer");
+        menu.setTitle("Saucy Shooters");
         menu.setResizable(false);
         menu.setLocationByPlatform(true);
         menu.setLayout(null);
@@ -191,6 +198,10 @@ public class Main implements ActionListener, KeyListener, MouseMotionListener {
                 whichSong = 3;
             }
         });
+    }
+
+    public void game(){
+
     }
 
     public void openLink(String url) {
