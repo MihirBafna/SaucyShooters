@@ -18,14 +18,14 @@ public class Main implements ActionListener, KeyListener, MouseMotionListener {
     private static State state = State.MENU;
     private static enum State { MENU, GAME, WON};
     private JFrame screen;
-    private JFrame menu;
+    private JFrame menu = new JFrame();
     private int whichSong;
 
 
     @SuppressWarnings("unused")
     public static void main(String[] args) {
         if(state == State.MENU){
-            Main main = new Main();
+           Main main = new Main();
         }
     }
 
@@ -100,7 +100,7 @@ public class Main implements ActionListener, KeyListener, MouseMotionListener {
         menu.add(background);
         menu.pack();
         menu.setSize(screenwidth, screenheight);
-        menu.setTitle("Saucy Soccer");
+        menu.setTitle("Saucy Shooters");
         menu.setResizable(false);
         menu.setLocationByPlatform(true);
         menu.setLayout(null);
