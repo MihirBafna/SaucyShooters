@@ -26,15 +26,15 @@ public class Main implements ActionListener, KeyListener, MouseMotionListener {
     // objects of the actual game
     private Player player;
 
-
     @SuppressWarnings("unused")
     public static void main(String[] args) {
         if(state == State.MENU){
             Main main = new Main();
         }
+        
     }
 
-    public Main(){
+    public void menu() {
         // added JLables
         JLabel background = new JLabel(new ImageIcon("img/saucyshooterbackground.png"));
         JLabel title = new JLabel(new ImageIcon("img/saucyshooters.png"));
@@ -208,7 +208,7 @@ public class Main implements ActionListener, KeyListener, MouseMotionListener {
     public void startGame(){
         game = new JFrame();
         JLabel background = new JLabel(new ImageIcon("img/saucyshooterbackground.png"));
-        player = new Player(new ImageIcon("img/player1.png"),100.0,100.0,Color.CYAN,15.0);
+        player = new Player(new ImageIcon("img/player1.png"),100.0,100.0,100.0, 15.0, Color.CYAN);
         game.add(player.getLabel());
         game.add(background);
         game.pack();
