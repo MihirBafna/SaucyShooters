@@ -59,8 +59,8 @@ public class Weapon {
         if (shootable) {
             shootable = false;
             if (!reloading) {
-                double xDiff = x - player.getX();
-                double yDiff = y - player.getY();
+                double xDiff = x - player.getPX();
+                double yDiff = y - player.getPY();
                 ArrayList<Double> angles = new ArrayList<Double>();
                 Double mouseAngle = Math.atan2(yDiff, xDiff);
                 if (bulletsPerShot % 2 == 0) {
@@ -79,8 +79,7 @@ public class Weapon {
                     double bulletSpeedX = bulletSpeed * Math.cos(theta);
                     double bulletSpeedY = bulletSpeed * Math.sin(theta);
                     if (magazine > 0) {
-                        Bullet b = new Bullet(player.getX(), player.getY(), range, rangeFallOff, damage, damageFallOff, bulletSpeedX, bulletSpeedY,
-                                bulletSize);
+                        Bullet b = new Bullet(player.getPX(), player.getPY(), range, rangeFallOff, damage, damageFallOff, bulletSpeedX, bulletSpeedY,bulletSize);
                         bullets.add(b);
                         magazine--;
                     }

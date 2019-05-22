@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,37 +7,40 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.net.URL;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.Timer;
 
 public class Main implements ActionListener, KeyListener, MouseMotionListener {
+    // fields behind the actual game
     public static int screenwidth = 1000;
     public static int screenheight = 600;
-    private static State state = State.MENU;
     private static enum State { MENU, GAME, WON};
-    private JFrame screen;
-    private JFrame menu = new JFrame();
-    private int whichSong;
+    private static State state = State.MENU;
+    private static JFrame game;
+    private static JFrame menu = new JFrame();
+    private static int whichSong;
+    public Timer timer;
+    // objects of the actual game
+    private Player player;
 
 
     @SuppressWarnings("unused")
     public static void main(String[] args) {
         if(state == State.MENU){
-           Main main = new Main();
+            Main main = new Main();
         }
     }
 
     public Main(){
         // added JLables
-        JLabel background = new JLabel(new ImageIcon("images/nightbackground.png")); // image from
-                                                                                     // https://www.vectorstock.com/royalty-free-vector/cartoon-game-background-vector-7926680
-        JLabel title = new JLabel(new ImageIcon("images/saucysoccerlogo.png"));
-        JLabel music = new JLabel(new ImageIcon("images/saucymusic.png"));
-        JLabel controls = new JLabel(new ImageIcon("images/controls.png"));
-        JLabel settings = new JLabel(new ImageIcon("images/settings.png"));
+        JLabel background = new JLabel(new ImageIcon("img/saucyshooterbackground.png"));
+        JLabel title = new JLabel(new ImageIcon("img/saucyshooters.png"));
+        JLabel music = new JLabel(new ImageIcon("img/saucymusic.png"));
+        JLabel controls = new JLabel(new ImageIcon("img/controls.png"));
+        JLabel settings = new JLabel(new ImageIcon("img/settings.png"));
         JButton playbutton = new JButton();
         JButton controlsbutton = new JButton();
         JButton settingsbutton = new JButton();
@@ -52,16 +56,16 @@ public class Main implements ActionListener, KeyListener, MouseMotionListener {
         music1.setVisible(false);
         music2.setVisible(false);
         music3.setVisible(false);
-        backbutton.setIcon(new ImageIcon("images/backbutton1.png"));
-        forkbutton.setIcon(new ImageIcon("images/githublogo.png"));
-        playbutton.setIcon(new ImageIcon("images/playbutton.png"));
-        controlsbutton.setIcon(new ImageIcon("images/controlsbutton.png"));
-        settingsbutton.setIcon(new ImageIcon("images/settingsbutton.png"));
-        title.setBounds(screenwidth / 2 - 200, 20, 400, 200);
+        backbutton.setIcon(new ImageIcon("img/backbutton1.png"));
+        forkbutton.setIcon(new ImageIcon("img/githublogo.png"));
+        playbutton.setIcon(new ImageIcon("img/play1.png"));
+        controlsbutton.setIcon(new ImageIcon("img/controls1.png"));
+        settingsbutton.setIcon(new ImageIcon("img/settings1.png"));
+        title.setBounds(screenwidth / 2 - 250, 10, 520, 250);
         background.setBounds(0, 0, screenwidth, screenheight);
-        playbutton.setBounds(screenwidth / 2 - 80, 240, 160, 80);
-        controlsbutton.setBounds(screenwidth / 2 - 80, 340, 160, 80);
-        settingsbutton.setBounds(screenwidth / 2 - 80, 440, 160, 80);
+        playbutton.setBounds(screenwidth / 2 - 100, 260, 200, 105);
+        controlsbutton.setBounds(screenwidth / 2 - 180, 360, 350, 100);
+        settingsbutton.setBounds(screenwidth / 2 - 180, 450, 350, 100);
         forkbutton.setBounds(950, 10, 40, 40);
         controls.setBounds(0, 0, screenwidth, screenheight);
         settings.setBounds(0, 0, screenwidth, screenheight);
@@ -111,7 +115,7 @@ public class Main implements ActionListener, KeyListener, MouseMotionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SoundEffect.buttonclick.play();
-                openLink("https://github.com/MihirBafna/SaucySoccer");
+                openLink("https://github.com/MihirBafna/SaucyShooters");
             }
         });
         playbutton.addActionListener(new ActionListener() {
@@ -121,7 +125,7 @@ public class Main implements ActionListener, KeyListener, MouseMotionListener {
                 menu.setVisible(false);
                 menu.dispose();
                 state = State.GAME;
-                //startGame();
+                startGame();
             }
         });
         controlsbutton.addActionListener(new ActionListener() {
@@ -193,12 +197,35 @@ public class Main implements ActionListener, KeyListener, MouseMotionListener {
         });
     }
 
-    public void openLink(String url) {
+    public static void openLink(String url) {
         try {
             Desktop.getDesktop().browse(new URL(url).toURI());
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void startGame(){
+        game = new JFrame();
+        JLabel background = new JLabel(new ImageIcon("img/saucyshooterbackground.png"));
+        player = new Player(new ImageIcon("img/player1.png"),100.0,100.0,Color.CYAN,15.0);
+        game.add(player.getLabel());
+        game.add(background);
+        game.pack();
+        game.setSize(screenwidth, screenheight);
+        game.setTitle("Saucy Shooters");
+        game.setResizable(false);
+        game.setLocationByPlatform(true);
+        game.setLayout(null);
+        game.addKeyListener(this);
+        timer = new Timer(1000 / 60, this);
+        timer.start();
+        game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        game.setVisible(true);
+    }
+
+    public void update(){
+
     }
 
     // override methods
@@ -219,12 +246,32 @@ public class Main implements ActionListener, KeyListener, MouseMotionListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == 87) { // up
+        }
+        if (e.getKeyCode() == 83) { // down
+        }
+        if (e.getKeyCode() == 65) { // left
+        }
+        if (e.getKeyCode() == 68) { // right
+        }
+        if (e.getKeyCode() == 32) { // spacebar
 
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+        if (e.getKeyCode() == 87) { // up
+        }
+        if (e.getKeyCode() == 83) { // down
+        }
+        if (e.getKeyCode() == 65) { // left
+        }
+        if (e.getKeyCode() == 68) { // right
+        }
+        if (e.getKeyCode() == 32) { // spacebar
 
+        }
     }
 
     @Override

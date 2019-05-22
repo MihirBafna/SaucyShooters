@@ -13,8 +13,7 @@ public class Bullet {
 	private double velY;
 	private double size;
 
-	public Bullet(double initX, double initY, double range, double rangeFallOff, double damage, double damageFallOff,
-			double velX, double velY, double size) {
+	public Bullet(double initX, double initY, double range, double rangeFallOff, double damage, double damageFallOff, double velX, double velY, double size) {
 		this.initX = initX;
 		this.initY = initY;
 		x = initX;
