@@ -1,3 +1,4 @@
+
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,28 +16,32 @@ import javax.swing.JLabel;
 public class Main implements ActionListener, KeyListener, MouseMotionListener {
     public static int screenwidth = 1000;
     public static int screenheight = 600;
-    private static enum State { MENU, GAME, WON};
+
+    private static enum State {
+        MENU, GAME, WON
+    };
+
     private static State state = State.MENU;
     private JFrame screen;
     private JFrame menu = new JFrame();
     private int whichSong;
-
 
     @SuppressWarnings("unused")
     public static void main(String[] args) {
         Main main = new Main();
     }
 
-    public Main(){
-        if(state == State.MENU){
-           Main main = new Main();
+    public Main() {
+        if (state == State.MENU) {
+            // Main main = new Main();
         }
+        
     }
 
-    public void menu(){
+    public void menu() {
         // added JLables
         JLabel background = new JLabel(new ImageIcon("img/nightbackground.png")); // image from
-                                                                                     // https://www.vectorstock.com/royalty-free-vector/cartoon-game-background-vector-7926680
+                                                                                  // https://www.vectorstock.com/royalty-free-vector/cartoon-game-background-vector-7926680
         JLabel title = new JLabel(new ImageIcon("img/saucysoccerlogo.png"));
         JLabel music = new JLabel(new ImageIcon("img/saucymusic.png"));
         JLabel controls = new JLabel(new ImageIcon("img/controls.png"));
@@ -125,7 +130,7 @@ public class Main implements ActionListener, KeyListener, MouseMotionListener {
                 menu.setVisible(false);
                 menu.dispose();
                 state = State.GAME;
-                //startGame();
+                // startGame();
             }
         });
         controlsbutton.addActionListener(new ActionListener() {
@@ -197,7 +202,7 @@ public class Main implements ActionListener, KeyListener, MouseMotionListener {
         });
     }
 
-    public void game(){
+    public void game() {
 
     }
 

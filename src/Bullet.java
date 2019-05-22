@@ -16,7 +16,7 @@ public class Bullet {
     private double velX;
     private double velY;
     private double size;
-    private Circle c;
+    private Circle circle;
 
     public Bullet(double initX, double initY, double range, double rangeFallOff, double damage, double damageFallOff,
             double velX, double velY, double size) {
@@ -28,23 +28,20 @@ public class Bullet {
         this.velX = velX;
         this.velY = velY;
         this.size = size;
-        c = new Circle(x,y,size);
+        circle = new Circle(x, y, size);
     }
 
-    public Circle hitbox() {
-        return c;
-    }
-
-    public void travel() {
+    public void move() {
         x += velX;
         y += velY;
-        c.setCenterX(x);
-        c.setCenterY(y);
+        circle.setCenterX(x);
+        circle.setCenterY(y);
+        damageUpdate();
     }
 
     public void draw(Graphics g, Color c) {
         g.setColor(c);
-        g.fillOval((int) (x - size), (int) (y - size), (int) size, (int) size);
+        g.fillOval((int) (x - size / 2), (int) (y - size / 2), (int) size, (int) size);
     }
 
     public void damageUpdate() {
@@ -159,12 +156,12 @@ public class Bullet {
         this.size = size;
     }
 
-    public Circle getC() {
-        return this.c;
+    public Circle getCircle() {
+        return this.circle;
     }
 
-    public void setC(Circle c) {
-        this.c = c;
+    public void setC(Circle circle) {
+        this.circle = circle;
     }
 
 }
