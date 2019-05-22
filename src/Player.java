@@ -63,6 +63,40 @@ public class Player {
         g.fillOval((int) (x - size / 2), (int) (y - size / 2), (int) size, (int) size);
     }
 
+    public void gather() {
+        for (Item i : Main.items) {
+            if (GameObject.collision(circle, i.getRectangle())) {
+                if (i instanceof Gun) {
+                    inventory.addGun((Gun) i);
+                    return;
+                }
+                if (i instanceof Grenade) {
+                    inventory.addGrenade((Grenade) i);
+                    return;
+                }
+                if (i instanceof Ammo) {
+                    inventory.addAmmo((Ammo) i);
+                    return;
+                }
+            }
+        }
+    }
+
+
+	public void openCrate() {
+        for (Item c : Main.items) {
+            if (c instanceof Crate) {
+                if (GameObject.collision(circle, c.getRectangle())) {
+                    Main.items.add(((Crate) c).generateWeapon());
+                    Main.items.add(((Crate) c).generateAmmo());
+                    Main.objects.remove(c.getRectangle());
+                    Main.items.remove(c);
+                    break;
+                }
+            }
+        }
+    }
+
     public double getX() {
         return this.x;
     }

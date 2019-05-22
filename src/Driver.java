@@ -53,9 +53,9 @@ public class Driver extends JPanel implements ActionListener, KeyListener, Mouse
 	ArrayList<Ammo> ammoPool = new ArrayList<Ammo>();
 	Ammo light = new Ammo(15, 300, "light", 15, "lightammo.png", 10, 10);
 
-	ArrayList<Shape> objects = new ArrayList<Shape>();
+	public ArrayList<Shape> objects = new ArrayList<Shape>();
 
-	ArrayList<Item> items = new ArrayList<Item>();
+	public ArrayList<Item> items = new ArrayList<Item>();
 
 	public static void main(String[] args) {
 		Driver d = new Driver();
@@ -189,36 +189,6 @@ public class Driver extends JPanel implements ActionListener, KeyListener, Mouse
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// movement
-		// changes velocity based on key pressed
-		if (e.getKeyCode() == e.VK_A) {
-			player.setVelX(-player.getSpeed());
-		} else if (e.getKeyCode() == e.VK_D) {
-			player.setVelX(player.getSpeed());
-		}
-		if (e.getKeyCode() == e.VK_W) {
-			player.setVelY(-player.getSpeed());
-		} else if (e.getKeyCode() == e.VK_S) {
-			player.setVelY(player.getSpeed());
-		}
-
-		if (e.getKeyCode() == e.VK_R) {
-			System.out.println();
-			System.out.println("RELOADING");
-			player.reload();
-		}
-
-		if (e.getKeyCode() == e.VK_F) {
-			gather();
-		}
-
-		if (e.getKeyCode() == e.VK_1) {
-			player.setEquippedWeapon(player.getInventory().getGuns().get(0));
-		}
-
-		if (e.getKeyCode() == e.VK_O) {
-			openCrate();
-		}
 
 	}
 
@@ -233,7 +203,6 @@ public class Driver extends JPanel implements ActionListener, KeyListener, Mouse
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		player.shoot(arg0.getX(), arg0.getY());
 	}
 
 	@Override
@@ -254,15 +223,6 @@ public class Driver extends JPanel implements ActionListener, KeyListener, Mouse
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		// more movement
-		// changes velocity based on key pressed
-		// animation change/idle position
-		if (arg0.getKeyCode() == arg0.VK_A || arg0.getKeyCode() == arg0.VK_D) {
-			player.setVelX(0);
-		}
-		if (arg0.getKeyCode() == arg0.VK_W || arg0.getKeyCode() == arg0.VK_S) {
-			player.setVelY(0);
-		}
 	}
 
 	@Override
@@ -271,110 +231,6 @@ public class Driver extends JPanel implements ActionListener, KeyListener, Mouse
 
 	}
 
-	public void openCrate() {
-		for (Item c : items) {
-			if (c instanceof Crate) {
-				if (GameObject.collision(player.getCircle(), c.getRectangle())) {
-					items.add(((Crate) c).generateWeapon());
-					items.add(((Crate) c).generateAmmo());
-					objects.remove(c.getRectangle());
-					items.remove(c);
-					break;
-				}
-			}
-		}
-	}
 
-	public void gather() {
-		for (Item i : items) {
-			if (GameObject.collision(player.getCircle(), i.getRectangle())) {
-				if (i instanceof Gun) {
-					addGun((Gun) i);
-					return;
-				}
-				if (i instanceof Grenade) {
-					addGrenade((Grenade) i);
-					return;
-				}
-				if (i instanceof Ammo) {
-					addAmmo((Ammo) i);
-					return;
-				}
-			}
-		}
-	}
-
-	public void addGun(Gun gun) {
-		ArrayList<Gun> guns = player.getInventory().getGuns();
-		for (int g = 0; g < guns.size(); g++) {
-			if (guns.get(g) == null) {
-				guns.set(g, gun);
-				guns.get(g).setEquipped(true);
-				items.remove(gun);
-				return;
-			}
-		}
-		for (int g = 0; g < guns.size(); g++) {
-			if (guns.get(g).isEquipped()) {
-				guns.get(g).setEquipped(false);
-				items.add(guns.get(g));
-				guns.set(g, gun);
-				guns.get(g).setEquipped(true);
-				items.remove(gun);
-				return;
-			}
-		}
-	}
-
-	public void addGrenade(Grenade grenade) {
-		ArrayList<Grenade> grenades = player.getInventory().getGrenades();
-		for (int g = 0; g < grenades.size(); g++) {
-			if (grenades.get(g) == null) {
-				grenades.set(g, grenade);
-				grenades.get(g).setEquipped(false);
-				items.remove(grenade);
-				return;
-			}
-		}
-		for (int g = 0; g < grenades.size(); g++) {
-			if (grenades.get(g).isEquipped()) {
-				grenades.get(g).setEquipped(false);
-				items.add(grenades.get(g));
-				grenades.set(g, grenade);
-				grenades.get(g).setEquipped(true);
-				items.remove(grenade);
-			}
-		}
-	}
-
-	public void addAmmo(Ammo ammo) {
-		ArrayList<Ammo> ammos = player.getInventory().getAmmos();
-		for (int a = 0; a < ammos.size(); a++) {
-			if (ammos.get(a) != null) {
-				if (ammos.get(a).getType().equals(ammo.getType())) {
-					for (int i = 0; i < ammo.getAmount(); i++) {
-						if (ammos.get(a).getAmount() < ammos.get(a).getStackSize()) {
-							if (ammo.getAmount() > 0) {
-								ammos.get(a).add(1);
-								ammo.subtract(1);
-							}
-						}
-						if (ammo.getAmount() == 0) {
-							items.remove(ammo);
-							return;
-						}
-					}
-				}
-
-			}
-		}
-		for (int a = 0; a < ammos.size(); a++) {
-			if (ammos.get(a) == null) {
-				ammos.set(a, ammo);
-				ammos.get(a).setAmount(ammo.getPileAmount());
-				items.remove(ammo);
-			}
-		}
-	}
 
 }

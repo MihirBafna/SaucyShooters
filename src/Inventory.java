@@ -35,12 +35,77 @@ public class Inventory {
         }
     }
 
-    public void addAmmo(Ammo ammo){
-
+    public void addGun(Gun gun) {
+        ArrayList<Gun> guns = Main.player.getInventory().getGuns();
+        for (int g = 0; g < guns.size(); g++) {
+            if (guns.get(g) == null) {
+                guns.set(g, gun);
+                guns.get(g).setEquipped(true);
+                Main.items.remove(gun);
+                return;
+            }
+        }
+        for (int g = 0; g < guns.size(); g++) {
+            if (guns.get(g).isEquipped()) {
+                guns.get(g).setEquipped(false);
+                Main.items.add(guns.get(g));
+                guns.set(g, gun);
+                guns.get(g).setEquipped(true);
+                Main.items.remove(gun);
+                return;
+            }
+        }
     }
 
-    public void addGrenade(Grenade grenade){
+    public void addGrenade(Grenade grenade) {
+        ArrayList<Grenade> grenades = Main.player.getInventory().getGrenades();
+        for (int g = 0; g < grenades.size(); g++) {
+            if (grenades.get(g) == null) {
+                grenades.set(g, grenade);
+                grenades.get(g).setEquipped(false);
+                Main.items.remove(grenade);
+                return;
+            }
+        }
+        for (int g = 0; g < grenades.size(); g++) {
+            if (grenades.get(g).isEquipped()) {
+                grenades.get(g).setEquipped(false);
+                Main.items.add(grenades.get(g));
+                grenades.set(g, grenade);
+                grenades.get(g).setEquipped(true);
+                Main.items.remove(grenade);
+            }
+        }
+    }
 
+    public void addAmmo(Ammo ammo) {
+        ArrayList<Ammo> ammos = Main.player.getInventory().getAmmos();
+        for (int a = 0; a < ammos.size(); a++) {
+            if (ammos.get(a) != null) {
+                if (ammos.get(a).getType().equals(ammo.getType())) {
+                    for (int i = 0; i < ammo.getAmount(); i++) {
+                        if (ammos.get(a).getAmount() < ammos.get(a).getStackSize()) {
+                            if (ammo.getAmount() > 0) {
+                                ammos.get(a).add(1);
+                                ammo.subtract(1);
+                            }
+                        }
+                        if (ammo.getAmount() == 0) {
+                            Main.items.remove(ammo);
+                            return;
+                        }
+                    }
+                }
+
+            }
+        }
+        for (int a = 0; a < ammos.size(); a++) {
+            if (ammos.get(a) == null) {
+                ammos.set(a, ammo);
+                ammos.get(a).setAmount(ammo.getPileAmount());
+                Main.items.remove(ammo);
+            }
+        }
     }
 
     public ArrayList<Gun> getGuns() {
