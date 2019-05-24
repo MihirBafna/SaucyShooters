@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -14,11 +15,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import javafx.scene.shape.Shape;
@@ -33,7 +36,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseMo
     };
 
     private static State state = State.MENU;
-    private static JFrame game;
+    public static JFrame game;
     private static JFrame menu = new JFrame();
     private static int whichSong;
     public Timer timer;
@@ -143,7 +146,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseMo
         playbutton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SoundEffect.buttonclick.play();
+                // SoundEffect.buttonclick.play();
                 menu.setVisible(false);
                 menu.dispose();
                 state = State.GAME;
@@ -229,47 +232,48 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseMo
 
     public void initializeWorld() {
         for (int i = 0; i < 3; i++) {
-            Crate c = new Crate("img/Crate_100x100.png", 100, 100);
+            Crate c = new Crate("Crate_100x100.png", 100, 100);
             c.setX(i * 200);
             c.setY(i * 200);
             items.put(new Point((int) c.getX(), (int) c.getY()), c);
+            c.addImage();
         }
     }
 
     public void startGame() {
         game = new JFrame();
-        JLabel background = new JLabel(new ImageIcon("img/saucyshooterbackground.png"));
-        player = new Player(new ImageIcon("img/player1.png"), 100.0, 100.0, 100.0, 15.0, Color.CYAN);
-        initializeWorld();
-        game.add(player.getLabel());
-        // game.add(background);
         game.setTitle("Saucy Shooters");
-        game.pack();
         game.setSize(screenwidth, screenheight);
         game.getContentPane();
+        // JLabel background = new JLabel(new
+        // ImageIcon("img/saucyshooterbackground.png"));
+        // game.add(background);
         game.getContentPane().add(this);
         game.setResizable(false);
         game.setLocationByPlatform(true);
         game.setLayout(null);
         game.addKeyListener(this);
-        game.addMouseListener(this);
         game.addMouseMotionListener(this);
+        game.addMouseListener(this);
 
+        initializeWorld();
+        player = new Player(new ImageIcon("img/player1.png"), screenwidth/2, screenheight/2, 3.0, 15.0, Color.CYAN);
+        game.add(player.getLabel());
         weaponPool.add(shotgun);
         ammoPool.add(light);
         objects.add(player.getCircle());
-        // for (int i = 0; i < 2; i++) {
-        // Crate c = new Crate("crate.png", 100, 100);
-        // items.add(c);
-        // }
 
-        timer = new Timer(1000 / 60, this);
-        timer.start();
+        t = new Timer(1000 / 60, this);
+        t.start();
+        // game.pack();
         game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         game.setVisible(true);
     }
 
+    Timer t;
+
     public void update() {
+        draw();
         player.move();
         for (Gun gun : player.getInventory().getGuns()) {
             if (gun != null) {
@@ -282,73 +286,83 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseMo
         // }
     }
 
+    public void draw() {
+        for (Point p : items.keySet()) {
+            items.get(p).setBounds();
+        }
+    }
+
     // override methods
     @Override
     public void actionPerformed(ActionEvent e) {
-
         update();
-        repaint();
-
+        // repaint();
     }
 
-    @Override
-    public void paint(Graphics g) {
-        // paints images/font/progress bars
-        super.paint(g);
-        player.draw(g);
-        for (Point p : items.keySet()) {
-            items.get(p).drawImage(g);
-        }
+    // @Override
+    // public void paint(Graphics g) {
+    // // paints images/font/progress bars
+    // super.paint(g);
+    // player.draw(g);
+    // System.out.println("out");
+    // for (Point p : items.keySet()) {
+    // System.out.println("in");
+    // System.out.println(items.get(p).getImgName());
+    // items.get(p).drawImage(g);
+    // }
+    // System.out.println("out");
 
-        for (Gun gun : player.getInventory().getGuns()) {
-            if (gun != null) {
-                gun.drawBullets(g, player.getColor());
-            }
-        }
+    // for (Gun gun : player.getInventory().getGuns()) {
+    // if (gun != null) {
+    // gun.drawBullets(g, player.getColor());
+    // }
+    // }
 
-        player.draw(g);
-        // g.fillRect(0, 0, 50, 50);
-        g.setColor(Color.black);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-        // score and instructions
-        g.drawString("Read the console for instructions", 400, 790);
-        if (player.getInventory().getAmmos().get(0) != null) {
-            g.drawString(Integer.toString(player.getInventory().getAmmos().get(0).getAmount()), 400, 500);
-        }
-        if (player.getEquippedWeapon() != null) {
-            if (player.getEquippedWeapon() instanceof Gun) {
-                int magazine = ((Gun) player.getEquippedWeapon()).getMagazine();
-                int magazineSize = ((Gun) player.getEquippedWeapon()).getMagazineSize();
-                g.drawString(Integer.toString(magazine) + " / " + Integer.toString(magazineSize), 800, 800);
-            }
-        }
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
-        repaint();
+    // player.draw(g);
+    // // g.fillRect(0, 0, 50, 50);
+    // g.setColor(Color.black);
+    // g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+    // // score and instructions
+    // g.drawString("Read the console for instructions", 400, 790);
+    // if (player.getInventory().getAmmos().get(0) != null) {
+    // g.drawString(Integer.toString(player.getInventory().getAmmos().get(0).getAmount()),
+    // 400, 500);
+    // }
+    // if (player.getEquippedWeapon() != null) {
+    // if (player.getEquippedWeapon() instanceof Gun) {
+    // int magazine = ((Gun) player.getEquippedWeapon()).getMagazine();
+    // int magazineSize = ((Gun) player.getEquippedWeapon()).getMagazineSize();
+    // g.drawString(Integer.toString(magazine) + " / " +
+    // Integer.toString(magazineSize), 800, 800);
+    // }
+    // }
+    // g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+    // repaint();
 
-    }
+    // }
 
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        // paints stationary images like background and inventory
-        // Image img = null;
-        // try {
-        // img = ImageIO.read(new File("background.png"));
-        // } catch (IOException e) {
-        // // TODO Auto-generated catch block
-        // e.printStackTrace();
-        // }
-        // Image inventory = null;
-        // try {
-        // inventory = ImageIO.read(new File("inventory.png"));
-        // } catch (IOException e) {
-        // // TODO Auto-generated catch block
-        // e.printStackTrace();
-        // }
-        // g.drawImage(inventory, 480, 0, null);
-        // g.drawImage(img, 0, 0, null);
-
-    }
+    // @Override
+    // public void paintComponent(Graphics g) {
+    // super.paintComponent(g);
+    // System.out.println("asda");
+    // // paints stationary images like background and inventory
+    // // Image img = null;
+    // // try {
+    // // img = ImageIO.read(new File("background.png"));
+    // // } catch (IOException e) {
+    // // // TODO Auto-generated catch block
+    // // e.printStackTrace();
+    // // }
+    // // Image inventory = null;
+    // // try {
+    // // inventory = ImageIO.read(new File("inventory.png"));
+    // // } catch (IOException e) {
+    // // // TODO Auto-generated catch block
+    // // e.printStackTrace();
+    // // }
+    // // g.drawImage(inventory, 480, 0, null);
+    // // g.drawImage(img, 0, 0, null);
+    // }
 
     @Override
     public void mouseDragged(MouseEvent e) {

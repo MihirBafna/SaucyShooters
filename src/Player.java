@@ -54,16 +54,31 @@ public class Player {
         }
     }
 
+    // public void move() {
+    // x += velX;
+    // y += velY;
+    // circle.setCenterX(x);
+    // circle.setCenterY(y);
+    // }
+
     public void move() {
-        x += velX;
-        y += velY;
-        circle.setCenterX(x);
-        circle.setCenterY(y);
+        for (Point p : Main.items.keySet()) {
+            Item i = Main.items.get(p);
+            double itemX = i.getX();
+            double itemY = i.getY();
+            i.setX(itemX -= velX);
+            i.setY(itemY -= velY);
+        }
     }
 
     public void draw(Graphics g) {
         g.setColor(color);
         g.fillOval((int) (x - size / 2), (int) (y - size / 2), (int) size, (int) size);
+    }
+
+    public void addImage() {
+        label.setBounds((int) x, (int) y, (int) size, (int) size);
+        Main.game.add(label);
     }
 
     public void gather() {
@@ -94,7 +109,7 @@ public class Player {
                     Weapon w = ((Crate) c).generateWeapon();
                     Main.items.put(w.getP(), w);
                     Ammo a = ((Crate) c).generateAmmo();
-                    Main.items.put(a.getP(),a);
+                    Main.items.put(a.getP(), a);
                     Main.objects.remove(c.getRectangle());
                     Main.items.remove(c.getP());
                     break;
