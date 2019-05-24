@@ -1,6 +1,8 @@
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javafx.scene.shape.Circle;
@@ -37,7 +39,8 @@ public class Player {
             equippedWeapon.shoot(mouseX, mouseY, x, y);
         }
     }
-    public JLabel getLabel(){
+
+    public JLabel getLabel() {
         return this.label;
     }
 
@@ -64,7 +67,8 @@ public class Player {
     }
 
     public void gather() {
-        for (Item i : Main.items) {
+        for (Point p : Main.items.keySet()) {
+            Item i = Main.items.get(p);
             if (GameObject.collision(circle, i.getRectangle())) {
                 if (i instanceof Gun) {
                     inventory.addGun((Gun) i);
@@ -82,15 +86,17 @@ public class Player {
         }
     }
 
-
-	public void openCrate() {
-        for (Item c : Main.items) {
+    public void openCrate() {
+        for (Point p : Main.items.keySet()) {
+            Item c = Main.items.get(p);
             if (c instanceof Crate) {
                 if (GameObject.collision(circle, c.getRectangle())) {
-                    Main.items.add(((Crate) c).generateWeapon());
-                    Main.items.add(((Crate) c).generateAmmo());
+                    Weapon w = ((Crate) c).generateWeapon();
+                    Main.items.put(w.getP(), w);
+                    Ammo a = ((Crate) c).generateAmmo();
+                    Main.items.put(a.getP(),a);
                     Main.objects.remove(c.getRectangle());
-                    Main.items.remove(c);
+                    Main.items.remove(c.getP());
                     break;
                 }
             }

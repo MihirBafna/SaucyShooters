@@ -1,5 +1,6 @@
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
 
@@ -11,6 +12,7 @@ public class Item {
 
     private double x;
     private double y;
+    private Point p;
     private String imgName;
     private double width;
     private double height;
@@ -28,6 +30,7 @@ public class Item {
     public Item(double x, double y, String imgName, double width, double height) {
         this.x = x;
         this.y = y;
+        this.p = new Point((int)x,(int)y);
         this.imgName = imgName;
         this.width = width;
         this.height = height;
@@ -62,6 +65,14 @@ public class Item {
 
     public void setY(double y) {
         this.y = y;
+    }
+
+    public Point getP(){
+        return this.p;
+    }
+
+    public void setP(double x, double y){
+        p = new Point((int)x,(int)y);
     }
 
     public String getImgName() {

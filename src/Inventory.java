@@ -1,3 +1,4 @@
+import java.awt.Point;
 import java.util.ArrayList;
 
 public class Inventory {
@@ -41,17 +42,17 @@ public class Inventory {
             if (guns.get(g) == null) {
                 guns.set(g, gun);
                 guns.get(g).setEquipped(true);
-                Main.items.remove(gun);
+                Main.items.remove(gun.getP());
                 return;
             }
         }
         for (int g = 0; g < guns.size(); g++) {
             if (guns.get(g).isEquipped()) {
+                Main.items.remove(gun.getP());
                 guns.get(g).setEquipped(false);
-                Main.items.add(guns.get(g));
+                Main.items.put(gun.getP(),guns.get(g));
                 guns.set(g, gun);
                 guns.get(g).setEquipped(true);
-                Main.items.remove(gun);
                 return;
             }
         }
@@ -63,17 +64,17 @@ public class Inventory {
             if (grenades.get(g) == null) {
                 grenades.set(g, grenade);
                 grenades.get(g).setEquipped(false);
-                Main.items.remove(grenade);
+                Main.items.remove(grenade.getP());
                 return;
             }
         }
         for (int g = 0; g < grenades.size(); g++) {
             if (grenades.get(g).isEquipped()) {
+                Main.items.remove(grenade.getP());
                 grenades.get(g).setEquipped(false);
-                Main.items.add(grenades.get(g));
+                Main.items.put(grenade.getP(),grenades.get(g));
                 grenades.set(g, grenade);
                 grenades.get(g).setEquipped(true);
-                Main.items.remove(grenade);
             }
         }
     }
@@ -91,7 +92,7 @@ public class Inventory {
                             }
                         }
                         if (ammo.getAmount() == 0) {
-                            Main.items.remove(ammo);
+                            Main.items.remove(ammo.getP());
                             return;
                         }
                     }
@@ -103,7 +104,7 @@ public class Inventory {
             if (ammos.get(a) == null) {
                 ammos.set(a, ammo);
                 ammos.get(a).setAmount(ammo.getPileAmount());
-                Main.items.remove(ammo);
+                Main.items.remove(ammo.getP());
             }
         }
     }

@@ -8,11 +8,11 @@ public class Crate extends Item {
 	private ArrayList<Ammo> ammoPool;
 	private ArrayList<Shape> objects;
 
-	public Crate(ArrayList<Weapon> weaponPool, ArrayList<Ammo> ammoPool, ArrayList<Shape> objects, String imgName, double width, double height) {
+	public Crate(String imgName, double width, double height) {
 		super(imgName, width, height);
-		this.ammoPool = ammoPool;
-		this.weaponPool = weaponPool;
-		this.objects = objects;
+		this.ammoPool = Main.ammoPool;
+		this.weaponPool = Main.weaponPool;
+		this.objects = Main.objects;
 		spawnable = false;
 		// change to map width height
 		while (!spawnable) {
@@ -71,7 +71,7 @@ public class Crate extends Item {
 		for (Ammo a : ammoPool) {
 			upperBound = lowerBound + a.getDropRate();
 			if (lowerBound <= random && random <= upperBound) {
-				Ammo drop = new Ammo(getX(), getY(), a);
+				Ammo drop = new Ammo(getX(), getY()+30, a);
 				return drop;
 			}
 			lowerBound = upperBound;

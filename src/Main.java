@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -11,6 +12,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -21,11 +23,15 @@ import javax.swing.Timer;
 
 import javafx.scene.shape.Shape;
 
-public class Main extends JPanel implements ActionListener, KeyListener, MouseMotionListener, MouseListener{
+public class Main extends JPanel implements ActionListener, KeyListener, MouseMotionListener, MouseListener {
     // fields behind the actual game
     public static int screenwidth = 1000;
     public static int screenheight = 600;
-    private static enum State { MENU, GAME, WON};
+
+    private static enum State {
+        MENU, GAME, WON
+    };
+
     private static State state = State.MENU;
     private static JFrame game;
     private static JFrame menu = new JFrame();
@@ -33,22 +39,24 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseMo
     public Timer timer;
     // objects of the actual game
     public static Player player;
-    private ArrayList<Weapon> weaponPool = new ArrayList<Weapon>();
-    private Gun shotgun = new Gun(500, 500, 100, 100, 30, 30, "light", 3000, 1000, 4, .15, 10, 10, 100, "shotgun.png", 30, 15);
-    private ArrayList<Ammo> ammoPool = new ArrayList<Ammo>();
+    public static ArrayList<Weapon> weaponPool = new ArrayList<Weapon>();
+    private Gun shotgun = new Gun(500, 500, 100, 100, 30, 30, "light", 3000, 1000, 4, .15, 10, 10, 100, "shotgun.png",
+            30, 15);
+    public static ArrayList<Ammo> ammoPool = new ArrayList<Ammo>();
     Ammo light = new Ammo(15, 300, "light", 15, "lightammo.png", 10, 10);
     public static ArrayList<Shape> objects = new ArrayList<Shape>();
-    public static ArrayList<Item> items = new ArrayList<Item>();
+    // public static ArrayList<Item> items = new ArrayList<Item>();
+    public static HashMap<Point, Item> items = new HashMap<Point, Item>();
 
     @SuppressWarnings("unused")
     public static void main(String[] args) {
-        if(state == State.MENU){
+        if (state == State.MENU) {
             Main main = new Main();
         }
-        
+
     }
 
-    public void menu() {
+    public Main() {
         // added JLables
         JLabel background = new JLabel(new ImageIcon("img/saucyshooterbackground.png"));
         JLabel title = new JLabel(new ImageIcon("img/saucyshooters.png"));
@@ -219,12 +227,23 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseMo
         }
     }
 
-    public void startGame(){
+    public void initializeWorld() {
+        for (int i = 0; i < 3; i++) {
+            Crate c = new Crate("img/Crate_100x100.png", 100, 100);
+            c.setX(i * 200);
+            c.setY(i * 200);
+            items.put(new Point((int) c.getX(), (int) c.getY()), c);
+        }
+    }
+
+    public void startGame() {
         game = new JFrame();
         JLabel background = new JLabel(new ImageIcon("img/saucyshooterbackground.png"));
-        player = new Player(new ImageIcon("img/player1.png"),100.0,100.0,100.0, 15.0, Color.CYAN);
+        player = new Player(new ImageIcon("img/player1.png"), 100.0, 100.0, 100.0, 15.0, Color.CYAN);
+        game.getContentPane();
         game.add(player.getLabel());
-        game.add(background);
+        // game.add(background);
+        game.getContentPane().add(this);
         game.pack();
         game.setSize(screenwidth, screenheight);
         game.setTitle("Saucy Shooters");
@@ -238,10 +257,10 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseMo
         weaponPool.add(shotgun);
         ammoPool.add(light);
         objects.add(player.getCircle());
-        for (int i = 0; i < 2; i++) {
-            Crate c = new Crate(weaponPool, ammoPool, objects, "crate.png", 100, 100);
-            items.add(c);
-        }
+        // for (int i = 0; i < 2; i++) {
+        // Crate c = new Crate("crate.png", 100, 100);
+        // items.add(c);
+        // }
 
         timer = new Timer(1000 / 60, this);
         timer.start();
@@ -249,7 +268,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseMo
         game.setVisible(true);
     }
 
-    public void update(){
+    public void update() {
         player.move();
         for (Gun gun : player.getInventory().getGuns()) {
             if (gun != null) {
@@ -276,8 +295,8 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseMo
         // paints images/font/progress bars
         super.paint(g);
         player.draw(g);
-        for (Item i : items) {
-            i.drawImage(g);
+        for (Point p : items.keySet()) {
+            items.get(p).drawImage(g);
         }
 
         for (Gun gun : player.getInventory().getGuns()) {
@@ -350,7 +369,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseMo
         player.shoot(e.getX(), e.getY());
 
     }
-    
+
     @Override
     public void keyPressed(KeyEvent e) {
         // movement
