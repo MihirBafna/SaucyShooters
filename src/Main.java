@@ -240,7 +240,8 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseMo
         game = new JFrame();
         JLabel background = new JLabel(new ImageIcon("img/saucyshooterbackground.png"));
         player = new Player(new ImageIcon("img/player1.png"), 100.0, 100.0, 100.0, 15.0, Color.CYAN);
-        // game.add(player.getLabel());
+        initializeWorld();
+        game.add(player.getLabel());
         // game.add(background);
         game.setTitle("Saucy Shooters");
         game.pack();
