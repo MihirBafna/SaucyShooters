@@ -242,7 +242,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseMo
         player = new Player(new ImageIcon("img/player1.png"), 100.0, 100.0, 100.0, 15.0, Color.CYAN);
         initializeWorld();
         game.add(player.getLabel());
-        // game.add(background);
+        game.add(background);
         game.setTitle("Saucy Shooters");
         game.pack();
         game.setSize(screenwidth, screenheight);
