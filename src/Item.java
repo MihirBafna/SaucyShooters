@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 import javafx.scene.shape.Rectangle;
 
@@ -17,6 +19,9 @@ public class Item {
     private double width;
     private double height;
 
+    private ImageIcon img;
+    private JLabel label;
+
     public Item() {
 
     }
@@ -25,6 +30,9 @@ public class Item {
         this.imgName = imgName;
         this.width = width;
         this.height = height;
+        img = new ImageIcon("img/"+imgName);
+        label = new JLabel(img);
+        label.setBounds((int) x, (int) y, (int) width, (int) height);
     }
 
     public Item(double x, double y, String imgName, double width, double height) {
@@ -34,6 +42,9 @@ public class Item {
         this.imgName = imgName;
         this.width = width;
         this.height = height;
+        img = new ImageIcon("img/"+imgName);
+        label = new JLabel(img);
+        label.setBounds((int) x, (int) y, (int) width, (int) height);
     }
 
     public void drawImage(Graphics g) {
@@ -45,6 +56,14 @@ public class Item {
             e.printStackTrace();
         }
         g.drawImage(image, (int) x, (int) y, null);
+    }
+
+    public void addImage() {
+        Main.game.add(label);
+    }
+
+    public void setBounds() {
+        label.setBounds((int) x, (int) y, (int) width, (int) height);
     }
 
     public Rectangle getRectangle() {
