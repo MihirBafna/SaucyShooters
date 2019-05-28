@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 public class Main extends JPanel implements ActionListener, KeyListener, MouseMotionListener, MouseListener {
@@ -36,27 +37,25 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseMo
     };
 
     private static State state = State.MENU;
-    public static JFrame game;
+    // public static JFrame game;
     private static JFrame menu = new JFrame();
     private static int whichSong;
-    public Timer timer;
     // objects of the actual game
-    public static Player player;
-    public static ArrayList<Weapon> weaponPool = new ArrayList<Weapon>();
-    private Gun shotgun = new Gun(500, 500, 100, 100, 30, 30, "light", 3000, 1000, 4, .15, 10, 10, 100, "shotgun.png",
-            30, 15);
-    public static ArrayList<Ammo> ammoPool = new ArrayList<Ammo>();
-    Ammo light = new Ammo(15, 300, "light", 15, "lightammo.png", 10, 10);
-    public static ArrayList<Shape> objects = new ArrayList<Shape>();
+    // public static Player player;
+    // public static ArrayList<Weapon> weaponPool = new ArrayList<Weapon>();
+    // private Gun shotgun = new Gun(500, 500, 100, 100, 30, 30, "light", 3000, 1000, 4, .15, 10, 10, 100, "shotgun.png",
+    //         30, 15);
+    // public static ArrayList<Ammo> ammoPool = new ArrayList<Ammo>();
+    // Ammo light = new Ammo(15, 300, "light", 15, "lightammo.png", 10, 10);
+    // public static ArrayList<Shape> objects = new ArrayList<Shape>();
     // public static ArrayList<Item> items = new ArrayList<Item>();
-    public static HashMap<Point, Item> items = new HashMap<Point, Item>();
+    // public static HashMap<Point, Item> items = new HashMap<Point, Item>();
 
     @SuppressWarnings("unused")
     public static void main(String[] args) {
         if (state == State.MENU) {
-            Main main = new Main();
+        Main main = new Main();
         }
-
     }
 
     public Main() {
@@ -150,7 +149,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseMo
                 menu.setVisible(false);
                 menu.dispose();
                 state = State.GAME;
-                startGame();
+                Game game = new Game();
             }
         });
         controlsbutton.addActionListener(new ActionListener() {
@@ -230,139 +229,12 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseMo
         }
     }
 
-    public void initializeWorld() {
-        for (int i = 0; i < 3; i++) {
-            Crate c = new Crate("Crate_100x100.png", 100, 100);
-            c.setX(i * 200);
-            c.setY(i * 200);
-            items.put(new Point((int) c.getX(), (int) c.getY()), c);
-            c.addImage();
-        }
-    }
-
-    public void startGame() {
-        game = new JFrame();
-        game.setTitle("Saucy Shooters");
-        game.setSize(screenwidth, screenheight);
-        game.getContentPane();
-        // JLabel background = new JLabel(new
-        // ImageIcon("img/saucyshooterbackground.png"));
-        // game.add(background);
-        game.getContentPane().add(this);
-        game.setResizable(false);
-        game.setLocationByPlatform(true);
-        game.setLayout(null);
-        game.addKeyListener(this);
-        game.addMouseMotionListener(this);
-        game.addMouseListener(this);
-
-        initializeWorld();
-        player = new Player(new ImageIcon("img/player1.png"), screenwidth/2, screenheight/2, 3.0, 15.0, Color.CYAN);
-        game.add(player.getLabel());
-        weaponPool.add(shotgun);
-        ammoPool.add(light);
-        objects.add(player.getCircle());
-
-        t = new Timer(1000 / 60, this);
-        t.start();
-        // game.pack();
-        game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        game.setVisible(true);
-    }
-
-    Timer t;
-
-    public void update() {
-        draw();
-        player.move();
-        for (Gun gun : player.getInventory().getGuns()) {
-            if (gun != null) {
-                gun.update();
-            }
-        }
-        // w.rangeDelete();
-        // for (Bullet b : w.getBullets()) {
-        // b.move();
-        // }
-    }
-
-    public void draw() {
-        for (Point p : items.keySet()) {
-            items.get(p).setBounds();
-        }
-    }
 
     // override methods
     @Override
     public void actionPerformed(ActionEvent e) {
-        update();
-        // repaint();
+
     }
-
-    // @Override
-    // public void paint(Graphics g) {
-    // // paints images/font/progress bars
-    // super.paint(g);
-    // player.draw(g);
-    // System.out.println("out");
-    // for (Point p : items.keySet()) {
-    // System.out.println("in");
-    // System.out.println(items.get(p).getImgName());
-    // items.get(p).drawImage(g);
-    // }
-    // System.out.println("out");
-
-    // for (Gun gun : player.getInventory().getGuns()) {
-    // if (gun != null) {
-    // gun.drawBullets(g, player.getColor());
-    // }
-    // }
-
-    // player.draw(g);
-    // // g.fillRect(0, 0, 50, 50);
-    // g.setColor(Color.black);
-    // g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-    // // score and instructions
-    // g.drawString("Read the console for instructions", 400, 790);
-    // if (player.getInventory().getAmmos().get(0) != null) {
-    // g.drawString(Integer.toString(player.getInventory().getAmmos().get(0).getAmount()),
-    // 400, 500);
-    // }
-    // if (player.getEquippedWeapon() != null) {
-    // if (player.getEquippedWeapon() instanceof Gun) {
-    // int magazine = ((Gun) player.getEquippedWeapon()).getMagazine();
-    // int magazineSize = ((Gun) player.getEquippedWeapon()).getMagazineSize();
-    // g.drawString(Integer.toString(magazine) + " / " +
-    // Integer.toString(magazineSize), 800, 800);
-    // }
-    // }
-    // g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
-    // repaint();
-
-    // }
-
-    // @Override
-    // public void paintComponent(Graphics g) {
-    // super.paintComponent(g);
-    // System.out.println("asda");
-    // // paints stationary images like background and inventory
-    // // Image img = null;
-    // // try {
-    // // img = ImageIO.read(new File("background.png"));
-    // // } catch (IOException e) {
-    // // // TODO Auto-generated catch block
-    // // e.printStackTrace();
-    // // }
-    // // Image inventory = null;
-    // // try {
-    // // inventory = ImageIO.read(new File("inventory.png"));
-    // // } catch (IOException e) {
-    // // // TODO Auto-generated catch block
-    // // e.printStackTrace();
-    // // }
-    // // g.drawImage(inventory, 480, 0, null);
-    // // g.drawImage(img, 0, 0, null);
-    // }
 
     @Override
     public void mouseDragged(MouseEvent e) {
@@ -381,52 +253,17 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseMo
 
     @Override
     public void mousePressed(MouseEvent e) {
-        player.shoot(e.getX(), e.getY());
 
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        // movement
-        // changes velocity based on key pressed
-        if (e.getKeyCode() == e.VK_A) {
-            player.setVelX(-player.getSpeed());
-        } else if (e.getKeyCode() == e.VK_D) {
-            player.setVelX(player.getSpeed());
-        }
-        if (e.getKeyCode() == e.VK_W) {
-            player.setVelY(-player.getSpeed());
-        } else if (e.getKeyCode() == e.VK_S) {
-            player.setVelY(player.getSpeed());
-        }
 
-        if (e.getKeyCode() == e.VK_R) {
-            System.out.println();
-            System.out.println("RELOADING");
-            player.reload();
-        }
-
-        if (e.getKeyCode() == e.VK_F) {
-            player.gather();
-        }
-
-        if (e.getKeyCode() == e.VK_1) {
-            player.setEquippedWeapon(player.getInventory().getGuns().get(0));
-        }
-
-        if (e.getKeyCode() == e.VK_O) {
-            player.openCrate();
-        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() == e.VK_A || e.getKeyCode() == e.VK_D) {
-            player.setVelX(0);
-        }
-        if (e.getKeyCode() == e.VK_W || e.getKeyCode() == e.VK_S) {
-            player.setVelY(0);
-        }
+
     }
 
     @Override

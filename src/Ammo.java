@@ -10,7 +10,9 @@ public class Ammo extends Item{
         super(x, y, ammo.getImgName(), ammo.getWidth(), ammo.getHeight());
         this.amount = ammo.amount;
         this.pileAmount = ammo.pileAmount;
+        this.stackSize = ammo.stackSize;
         this.type = ammo.type;
+        this.dropRate = ammo.dropRate;
     }
     
     public Ammo(int pileAmount, int stackSize, String type, double dropRate, String imgName, double width, double height) {

@@ -1,8 +1,12 @@
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Point;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javafx.scene.shape.Circle;
@@ -10,7 +14,6 @@ import javafx.scene.shape.Circle;
 public class Player {
     private double x;
     private double y;
-    private JLabel label;
     private double speed;
     private double hp;
     private Color color;
@@ -22,14 +25,15 @@ public class Player {
     private Inventory inventory;
     private Weapon equippedWeapon;
 
-    public Player(ImageIcon img, double x, double y, double speed, double hp, Color color) {
-        this.label = new JLabel(img);
+    private String imgName;
+
+    public Player(String imgName, double x, double y, double speed, double hp, Color color) {
+        this.imgName = imgName;
         this.x = x;
         this.y = y;
         this.speed = speed;
         this.color = color;
-        label.setBounds((int) x, (int) y, size, size);
-        circle = new Circle(x, y, size);
+        circle = new Circle(x, y, size / 2);
         inventory = new Inventory(2, 3, 2);
         equippedWeapon = null;
     }
@@ -38,10 +42,6 @@ public class Player {
         if (equippedWeapon != null) {
             equippedWeapon.shoot(mouseX, mouseY, x, y);
         }
-    }
-
-    public JLabel getLabel() {
-        return this.label;
     }
 
     public void reload() {
@@ -54,36 +54,28 @@ public class Player {
         }
     }
 
-    // public void move() {
-    // x += velX;
-    // y += velY;
-    // circle.setCenterX(x);
-    // circle.setCenterY(y);
-    // }
-
     public void move() {
-        for (Point p : Main.items.keySet()) {
-            Item i = Main.items.get(p);
-            double itemX = i.getX();
-            double itemY = i.getY();
-            i.setX(itemX -= velX);
-            i.setY(itemY -= velY);
+        Game.displayX -= velX;
+        Game.displayY -= velY;
+        x += velX;
+        y += velY;
+        circle.setCenterX(x);
+        circle.setCenterY(y);
+    }
+
+    public void drawImage(Graphics g) {
+        Image image = null;
+        try {
+            image = ImageIO.read(new File("img/" + imgName));
+        } catch (IOException e) {
+            System.out.println("ERROR");
+            e.printStackTrace();
         }
-    }
-
-    public void draw(Graphics g) {
-        g.setColor(color);
-        g.fillOval((int) (x - size / 2), (int) (y - size / 2), (int) size, (int) size);
-    }
-
-    public void addImage() {
-        label.setBounds((int) x, (int) y, (int) size, (int) size);
-        Main.game.add(label);
+        g.drawImage(image, (int) Game.screenwidth / 2 - size / 2, (int) Game.screenheight / 2 - size / 2, null);
     }
 
     public void gather() {
-        for (Point p : Main.items.keySet()) {
-            Item i = Main.items.get(p);
+        for (Item i : Game.items) {
             if (GameObject.collision(circle, i.getRectangle())) {
                 if (i instanceof Gun) {
                     inventory.addGun((Gun) i);
@@ -102,20 +94,31 @@ public class Player {
     }
 
     public void openCrate() {
-        for (Point p : Main.items.keySet()) {
-            Item c = Main.items.get(p);
+        for (Item c : Game.items) {
             if (c instanceof Crate) {
                 if (GameObject.collision(circle, c.getRectangle())) {
+                    Game.objects.remove(c.getRectangle());
+                    Game.items.remove(c);
                     Weapon w = ((Crate) c).generateWeapon();
-                    Main.items.put(w.getP(), w);
+                    Game.items.add(w);
                     Ammo a = ((Crate) c).generateAmmo();
-                    Main.items.put(a.getP(), a);
-                    Main.objects.remove(c.getRectangle());
-                    Main.items.remove(c.getP());
+                    Game.items.add(a);
                     break;
                 }
             }
         }
+    }
+
+    public int getEquippedAmmo() {
+        int amount = 0;
+        for (Ammo a : inventory.getAmmos()) {
+            if (a != null) {
+                if (a.getType().equals(((Gun) equippedWeapon).getAmmoType())) {
+                    amount += a.getAmount();
+                }
+            }
+        }
+        return amount;
     }
 
     public double getX() {
@@ -199,11 +202,15 @@ public class Player {
     }
 
     public Weapon getEquippedWeapon() {
-        return this.equippedWeapon;
+        return equippedWeapon;
     }
 
-    public void setEquippedWeapon(Weapon equippedWeapon) {
-        this.equippedWeapon = equippedWeapon;
+    public void setEquippedWeapon(Weapon nextEquipped) {
+        if (equippedWeapon != null) {
+            equippedWeapon.setEquipped(false);
+        }
+        nextEquipped.setEquipped(true);
+        equippedWeapon = nextEquipped;
     }
 
 }

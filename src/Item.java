@@ -21,6 +21,7 @@ public class Item {
 
     private ImageIcon img;
     private JLabel label;
+    private boolean drawn;
 
     public Item() {
 
@@ -33,6 +34,7 @@ public class Item {
         img = new ImageIcon("img/"+imgName);
         label = new JLabel(img);
         label.setBounds((int) x, (int) y, (int) width, (int) height);
+        drawn = false;
     }
 
     public Item(double x, double y, String imgName, double width, double height) {
@@ -45,6 +47,7 @@ public class Item {
         img = new ImageIcon("img/"+imgName);
         label = new JLabel(img);
         label.setBounds((int) x, (int) y, (int) width, (int) height);
+        drawn = false;
     }
 
     public void drawImage(Graphics g) {
@@ -58,13 +61,19 @@ public class Item {
         g.drawImage(image, (int) x, (int) y, null);
     }
 
-    public void addImage() {
-        Main.game.add(label);
-    }
+    // public void addImage() {
+    //     Main.game.add(label);
+    //     drawn = true;
+    // }
 
-    public void setBounds() {
-        label.setBounds((int) x, (int) y, (int) width, (int) height);
-    }
+    // public void removeImage() {
+    //     Main.game.remove(label);
+    //     drawn = false;
+    // }
+
+    // public void setBounds() {
+    //     label.setBounds((int) x, (int) y, (int) width, (int) height);
+    // }
 
     public Rectangle getRectangle() {
         return new Rectangle(x, y, width, height);
@@ -116,6 +125,30 @@ public class Item {
 
     public void setHeight(double height) {
         this.height = height;
+    }
+
+    public ImageIcon getImg() {
+        return this.img;
+    }
+
+    public void setImg(ImageIcon img) {
+        this.img = img;
+    }
+
+    public JLabel getLabel() {
+        return this.label;
+    }
+
+    public void setLabel(JLabel label) {
+        this.label = label;
+    }
+
+    public boolean isDrawn() {
+        return this.drawn;
+    }
+    
+    public void setDrawn(boolean drawn) {
+        this.drawn = drawn;
     }
 
 }

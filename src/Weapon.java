@@ -8,16 +8,19 @@ public abstract class Weapon extends Item{
     public Weapon(double dropRate) {
         super();
         this.dropRate = dropRate;
+        equipped = false;
     }
 
     public Weapon(double dropRate, String imgName, double width, double height) {
         super(imgName, width, height);
         this.dropRate = dropRate;
+        equipped = false;
     }
 
     public Weapon(double dropRate, double x, double y, String imgName, double width, double height) {
         super(x, y, imgName, width, height);
         this.dropRate = dropRate;
+        equipped = false;
     }
 
     public abstract void shoot(double mouseX, double mouseY, double playerX, double playerY);
