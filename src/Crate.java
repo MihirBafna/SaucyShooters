@@ -10,9 +10,9 @@ public class Crate extends Item {
 
 	public Crate(String imgName, double width, double height) {
 		super(imgName, width, height);
-		this.ammoPool = Main.ammoPool;
-		this.weaponPool = Main.weaponPool;
-		this.objects = Main.objects;
+		this.ammoPool = Game.ammoPool;
+		this.weaponPool = Game.weaponPool;
+		this.objects = Game.objects;
 		spawnable = false;
 		// change to map width height
 		while (!spawnable) {
@@ -42,7 +42,7 @@ public class Crate extends Item {
 	}
 
 	public Weapon generateWeapon() {
-		double random = Math.random() * totalWeaponFrequency() + 1;
+		double random = Math.random() * totalWeaponFrequency();
 		double lowerBound = 0;
 		double upperBound = 0;
 		for (Weapon w : weaponPool) {
@@ -65,13 +65,14 @@ public class Crate extends Item {
 	}
 
 	public Ammo generateAmmo() {
-		double random = Math.random() * totalAmmoFrequency() + 1;
+		double random = Math.random() * totalAmmoFrequency();
 		double lowerBound = 0;
 		double upperBound = 0;
 		for (Ammo a : ammoPool) {
 			upperBound = lowerBound + a.getDropRate();
 			if (lowerBound <= random && random <= upperBound) {
 				Ammo drop = new Ammo(getX(), getY()+30, a);
+				drop.setAmount(drop.getPileAmount());
 				return drop;
 			}
 			lowerBound = upperBound;

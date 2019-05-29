@@ -116,7 +116,8 @@ public class Server {
         return null;
     }
 
-    @SuppressWarnings("resource")public void kickClient(ClientInstance client){
+    @SuppressWarnings("resource")
+    public void kickClient(ClientInstance client){
 		Socket s;
 		for(int i = 0; i<clients.size(); i++){
 			s=clients.get(i);

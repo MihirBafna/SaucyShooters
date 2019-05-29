@@ -37,20 +37,22 @@ public class Inventory {
     }
 
     public void addGun(Gun gun) {
-        ArrayList<Gun> guns = Main.player.getInventory().getGuns();
+        ArrayList<Gun> guns = Game.player.getInventory().getGuns();
         for (int g = 0; g < guns.size(); g++) {
             if (guns.get(g) == null) {
                 guns.set(g, gun);
-                guns.get(g).setEquipped(true);
-                Main.items.remove(gun.getP());
+                guns.get(g).setEquipped(false);
+                Game.items.remove(gun);
                 return;
             }
         }
         for (int g = 0; g < guns.size(); g++) {
             if (guns.get(g).isEquipped()) {
-                Main.items.remove(gun.getP());
+                guns.get(g).setX(gun.getX());
+                guns.get(g).setY(gun.getY());
                 guns.get(g).setEquipped(false);
-                Main.items.put(gun.getP(),guns.get(g));
+                Game.items.remove(gun);
+                Game.items.add(guns.get(g));
                 guns.set(g, gun);
                 guns.get(g).setEquipped(true);
                 return;
@@ -59,20 +61,22 @@ public class Inventory {
     }
 
     public void addGrenade(Grenade grenade) {
-        ArrayList<Grenade> grenades = Main.player.getInventory().getGrenades();
+        ArrayList<Grenade> grenades = Game.player.getInventory().getGrenades();
         for (int g = 0; g < grenades.size(); g++) {
             if (grenades.get(g) == null) {
                 grenades.set(g, grenade);
                 grenades.get(g).setEquipped(false);
-                Main.items.remove(grenade.getP());
+                Game.items.remove(grenade);
                 return;
             }
         }
         for (int g = 0; g < grenades.size(); g++) {
             if (grenades.get(g).isEquipped()) {
-                Main.items.remove(grenade.getP());
+                Game.items.remove(grenade);
+                grenades.get(g).setX(grenade.getX());
+                grenades.get(g).setY(grenade.getY());
                 grenades.get(g).setEquipped(false);
-                Main.items.put(grenade.getP(),grenades.get(g));
+                Game.items.add(grenades.get(g));
                 grenades.set(g, grenade);
                 grenades.get(g).setEquipped(true);
             }
@@ -80,11 +84,12 @@ public class Inventory {
     }
 
     public void addAmmo(Ammo ammo) {
-        ArrayList<Ammo> ammos = Main.player.getInventory().getAmmos();
+        ArrayList<Ammo> ammos = Game.player.getInventory().getAmmos();
         for (int a = 0; a < ammos.size(); a++) {
             if (ammos.get(a) != null) {
                 if (ammos.get(a).getType().equals(ammo.getType())) {
-                    for (int i = 0; i < ammo.getAmount(); i++) {
+                    int count = ammo.getAmount();
+                    for (int i = 0; i < count; i++) {
                         if (ammos.get(a).getAmount() < ammos.get(a).getStackSize()) {
                             if (ammo.getAmount() > 0) {
                                 ammos.get(a).add(1);
@@ -92,19 +97,18 @@ public class Inventory {
                             }
                         }
                         if (ammo.getAmount() == 0) {
-                            Main.items.remove(ammo.getP());
+                            Game.items.remove(ammo);
                             return;
                         }
                     }
                 }
-
             }
         }
         for (int a = 0; a < ammos.size(); a++) {
             if (ammos.get(a) == null) {
                 ammos.set(a, ammo);
-                ammos.get(a).setAmount(ammo.getPileAmount());
-                Main.items.remove(ammo.getP());
+                Game.items.remove(ammo);
+                return;
             }
         }
     }

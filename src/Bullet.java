@@ -28,7 +28,7 @@ public class Bullet {
         this.velX = velX;
         this.velY = velY;
         this.size = size;
-        circle = new Circle(x, y, size);
+        circle = new Circle(x, y, size / 2);
     }
 
     public void move() {

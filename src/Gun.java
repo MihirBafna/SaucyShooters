@@ -102,10 +102,8 @@ public class Gun extends Weapon {
             final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
             executor.schedule(new Runnable() {
                 public void run() {
-                    if (isEquipped()) {
-                        if (!reloading) {
-                            shootable = true;
-                        }
+                    if (!reloading) {
+                        shootable = true;
                     }
                 }
             }, (long) fireSpeed, TimeUnit.MILLISECONDS);
