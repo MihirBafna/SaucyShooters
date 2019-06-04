@@ -1,5 +1,11 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 // import javafx.*;
 import javafx.scene.shape.Circle;
 
@@ -41,7 +47,16 @@ public class Bullet {
 
     public void draw(Graphics g, Color c) {
         g.setColor(c);
-        g.fillOval((int) (x - size / 2), (int) (y - size / 2), (int) size, (int) size);
+        // g.fillOval((int) (x - size / 2), (int) (y - size / 2), (int) size, (int)
+        // size);
+        Image image = null;
+        try {
+            image = ImageIO.read(new File("img/paintball.png"));
+        } catch (IOException e) {
+            System.out.println("ERROR");
+            e.printStackTrace();
+        }
+        g.drawImage(image, (int) (x - size / 2), (int) (y - size / 2), null);
     }
 
     public void damageUpdate() {
@@ -64,6 +79,11 @@ public class Bullet {
         double squareAB = (double) (Math.pow(x - initX, 2) + Math.pow(y - initY, 2));
         if (Math.sqrt(squareAB) >= range) {
             return true;
+        }
+        for (int i = 0; i < Game.objects.size(); i++) {
+            if (GameObject.collision(circle, Game.objects.get(i))) {
+                return true;
+            }
         }
         return false;
     }

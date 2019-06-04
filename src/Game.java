@@ -1,5 +1,6 @@
 import java.applet.Applet;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -40,8 +41,8 @@ import javafx.scene.shape.Shape;
 public class Game extends JPanel implements ActionListener, KeyListener, MouseListener, MouseMotionListener {
 
     // instantiating all objects and other variables
-    public static int screenwidth = 1000;
-    public static int screenheight = 600;
+    public static int screenwidth = 1600;
+    public static int screenheight = 900;
     public static int displayX = 0;
     public static int displayY = 0;
 
@@ -51,6 +52,10 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
     public static ArrayList<Ammo> ammoPool = new ArrayList<Ammo>();
     public static ArrayList<Shape> objects = new ArrayList<Shape>();
     public static ArrayList<Item> items = new ArrayList<Item>();
+
+    Image background = null;
+    Image ammoGUI = null;
+
     // public static HashMap<Point, Item> items = new HashMap<Point, Item>();
 
     // weapons
@@ -67,12 +72,12 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
 
     public void initializeWorld() {
         for (int i = 0; i < 10; i++) {
-            Crate c = new Crate("Crate_100x100.png", 100, 100);
-            c.setX(i * 200);
-            c.setY(i * 200);
+            Crate c = new Crate(i * 200, i * 200, "Crate_100x100.png", 100, 100);
+            // c.setX(i * 200);
+            // c.setY(i * 200);
             items.add(c);
         }
-        player = new Player("brevinPlayer.png", Game.screenwidth / 2, Game.screenheight / 2, 3.0, 15.0, Color.GREEN);
+        player = new Player("NEWCHARACTER4.png", Game.screenwidth / 2, Game.screenheight / 2, 3.0, 15.0, Color.GREEN);
     }
 
     public Game() {
@@ -81,6 +86,10 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
         f.setTitle("Saucy Shooters");
         f.setSize(Game.screenwidth, Game.screenheight);
         f.getContentPane();
+        // ImageIcon backg = new ImageIcon("img/map sketch.png"); // setups icon image
+        // JLabel background = new JLabel(backg);
+        // background.setBounds(-1920/2, -1080/2, 1920, 1080); // set location and size
+        // of icon
         f.getContentPane().add(this);
         f.pack();
         f.setResizable(false);
@@ -95,13 +104,20 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
         weaponPool.add(shotgun);
         weaponPool.add(AR);
         ammoPool.add(light);
-        objects.add(player.getCircle());
+        // objects.add(player.getCircle());
 
         // end creating objects
         t = new Timer(10, this);
         t.start();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
+
+        // image = ImageIO.read(new File("img/ammoGUIA.gif"));
+        background = new ImageIcon("img/map sketch.png").getImage();
+
+        // image = ImageIO.read(new File("img/ammoGUIA.gif"));
+        ammoGUI = new ImageIcon("img/ammoGUIA4.gif").getImage();
+
     }
 
     Timer t;
@@ -127,11 +143,13 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
         // paints images/font/progress bars
         super.paint(g);
         int buffer = 100;
-        player.drawImage(g);
         Rectangle screen = new Rectangle(-Game.displayX - buffer, -Game.displayY - buffer,
                 Game.screenwidth + (buffer * 2), Game.screenheight + (buffer * 2));
         g.translate(Game.displayX, Game.displayY);
+        
+        g.drawImage(background, -1920 / 2, -1080 / 2, null);
         for (Item i : items) {
+            i.setRectangle();
             if (GameObject.collision(i.getRectangle(), screen)) {
                 i.drawImage(g);
             }
@@ -141,11 +159,22 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
                 gun.drawBullets(g, player.getColor());
             }
         }
-
         g.setColor(Color.MAGENTA);
         g.setColor(Color.black);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
         // score and instructions
+
+        g.translate(-Game.displayX, -Game.displayY);
+        player.drawImage(g);
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
+        if (player.getEquippedWeapon() instanceof Gun) {
+            g.drawString(Integer.toString(((Gun) player.getEquippedWeapon()).getMagazine()), screenwidth - 290 - 10,
+                    screenheight - 62);
+            g.drawString(Integer.toString(player.getEquippedAmmo()), screenwidth - 197 - 10, screenheight - 62);
+        }
+
+        g.drawImage(ammoGUI, screenwidth - 320 - 10, screenheight - 150 - 10, null);
 
         repaint();
 
@@ -154,25 +183,28 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(Color.RED);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
-        Image image = null;
-        try {
-            image = ImageIO.read(new File("img/ammoGUI.png"));
-        } catch (IOException e) {
-            System.out.println("ERROR");
-            e.printStackTrace();
-        }
-        g.drawImage(image, 800, 400, null);
-        if (player.getEquippedWeapon() instanceof Gun) {
-            g.drawString(Integer.toString(((Gun) player.getEquippedWeapon()).getMagazine()), 850, 490);
-            g.drawString(Integer.toString(player.getEquippedAmmo()), 900, 540);
-        }
-
-        ArrayList<Gun> guns = player.getInventory().getGuns();
-        // g.drawString(guns.getImgName() , x, y);
+        // player.drawImage(g);
+        // g.setColor(Color.BLACK);
+        // g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
+        // if (player.getEquippedWeapon() instanceof Gun) {
+        //     g.drawString(Integer.toString(((Gun) player.getEquippedWeapon()).getMagazine()), screenwidth - 290 - 10,
+        //             screenheight - 62);
+        //     g.drawString(Integer.toString(player.getEquippedAmmo()), screenwidth - 197 - 10, screenheight - 62);
         // }
 
+        // g.drawImage(ammoGUI, screenwidth - 320 - 10, screenheight - 150 - 10, null);
+
+        // g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+        // ArrayList<Gun> guns = player.getInventory().getGuns();
+        // if (guns.get(0) != null) {
+        // g.drawString(guns.get(0).getImgName() + " ... ", 40, 550);
+        // }
+        // if (guns.get(1) != null) {
+        // g.drawString(guns.get(1).getImgName(), 160, 550);
+        // }
+        // if (player.getEquippedWeapon() != null) {
+        // g.drawString(player.getEquippedWeapon().getImgName(), 100, 580);
+        // }
     }
 
     @Override
@@ -235,7 +267,7 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
     @Override
     public void mouseMoved(MouseEvent arg0) {
         // TODO Auto-generated method stub
-
+        player.setTheta(arg0.getX() - displayX, arg0.getY() - displayY);
     }
 
     @Override
@@ -247,6 +279,10 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
     @Override
     public void mouseEntered(MouseEvent arg0) {
         // TODO Auto-generated method stub
+        java.awt.Toolkit toolkit = java.awt.Toolkit.getDefaultToolkit();
+        Image image = toolkit.getImage("img/CROSSHAIR_BOLD.png");
+        Cursor a = toolkit.createCustomCursor(image, new Point(this.getX(), this.getY()), "");
+        this.setCursor(a);
     }
 
     @Override

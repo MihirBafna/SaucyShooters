@@ -42,19 +42,25 @@ public class Inventory {
             if (guns.get(g) == null) {
                 guns.set(g, gun);
                 guns.get(g).setEquipped(false);
+                guns.get(g).setRectangle();
                 Game.items.remove(gun);
                 return;
             }
         }
         for (int g = 0; g < guns.size(); g++) {
             if (guns.get(g).isEquipped()) {
+                Game.player.setEquippedWeapon(null);
                 guns.get(g).setX(gun.getX());
                 guns.get(g).setY(gun.getY());
+                guns.get(g).setRectangle();
                 guns.get(g).setEquipped(false);
                 Game.items.remove(gun);
                 Game.items.add(guns.get(g));
                 guns.set(g, gun);
+                guns.get(g).setRectangle();
                 guns.get(g).setEquipped(true);
+                Game.player.setEquippedWeapon(null);
+                Game.player.setEquippedWeapon(guns.get(g));
                 return;
             }
         }
@@ -72,6 +78,7 @@ public class Inventory {
         }
         for (int g = 0; g < grenades.size(); g++) {
             if (grenades.get(g).isEquipped()) {
+                Game.player.setEquippedWeapon(null);
                 Game.items.remove(grenade);
                 grenades.get(g).setX(grenade.getX());
                 grenades.get(g).setY(grenade.getY());
@@ -79,6 +86,8 @@ public class Inventory {
                 Game.items.add(grenades.get(g));
                 grenades.set(g, grenade);
                 grenades.get(g).setEquipped(true);
+                Game.player.setEquippedWeapon(null);
+                Game.player.setEquippedWeapon(grenades.get(g));
             }
         }
     }

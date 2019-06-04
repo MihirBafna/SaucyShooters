@@ -6,23 +6,40 @@ public class Crate extends Item {
 	private boolean spawnable;
 	private ArrayList<Weapon> weaponPool;
 	private ArrayList<Ammo> ammoPool;
-	private ArrayList<Shape> objects;
 
 	public Crate(String imgName, double width, double height) {
 		super(imgName, width, height);
 		this.ammoPool = Game.ammoPool;
 		this.weaponPool = Game.weaponPool;
-		this.objects = Game.objects;
 		spawnable = false;
 		// change to map width height
 		while (!spawnable) {
 			setX(Math.random() * 1921);
 			setY(Math.random() * 1081);
+			setRectangle();
 			if (legalSpawn()) {
 				spawnable = true;
 			}
 		}
-		objects.add(getRectangle());
+		setRectangle();
+		Game.objects.add(getRectangle());
+	}
+
+	public Crate(double x, double y, String imgName, double width, double height) {
+		super(x, y, imgName, width, height);
+		this.ammoPool = Game.ammoPool;
+		this.weaponPool = Game.weaponPool;
+		spawnable = false;
+		// change to map width height
+		// while (!spawnable) {
+		// 	setX(Math.random() * 1921);
+		// 	setY(Math.random() * 1081);
+		// 	if (legalSpawn()) {
+		// 		spawnable = true;
+		// 	}
+		// }
+		setRectangle();
+		Game.objects.add(getRectangle());
 	}
 
 	public double totalWeaponFrequency() {
@@ -81,8 +98,8 @@ public class Crate extends Item {
 	}
 
 	public boolean legalSpawn() {
-		for (int i = 0; i < objects.size(); i++) {
-			if (GameObject.collision(getRectangle(), objects.get(i))) {
+		for (int i = 0; i < Game.objects.size(); i++) {
+			if (GameObject.collision(getRectangle(), Game.objects.get(i))) {
 				return false;
 			}
 		}
@@ -103,14 +120,6 @@ public class Crate extends Item {
 
 	public void setWeaponPool(ArrayList<Weapon> weaponPool) {
 		this.weaponPool = weaponPool;
-	}
-
-	public ArrayList<Shape> getObjects() {
-		return this.objects;
-	}
-
-	public void setObjects(ArrayList<Shape> objects) {
-		this.objects = objects;
 	}
 
 }

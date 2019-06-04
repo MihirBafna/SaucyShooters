@@ -129,9 +129,9 @@ public class Gun extends Weapon {
                                         break;
                                     }
                                 }
-                                shootable = true;
-                                reloading = false;
                             }
+                            shootable = true;
+                            reloading = false;
                         }
                     }, (long) reloadSpeed, TimeUnit.MILLISECONDS);
                 }

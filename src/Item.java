@@ -22,6 +22,7 @@ public class Item {
     private ImageIcon img;
     private JLabel label;
     private boolean drawn;
+    private Rectangle rectangle;
 
     public Item() {
 
@@ -31,29 +32,24 @@ public class Item {
         this.imgName = imgName;
         this.width = width;
         this.height = height;
-        img = new ImageIcon("img/"+imgName);
-        label = new JLabel(img);
-        label.setBounds((int) x, (int) y, (int) width, (int) height);
         drawn = false;
+        rectangle = new Rectangle(-10000, -10000, width, height);
     }
 
     public Item(double x, double y, String imgName, double width, double height) {
         this.x = x;
         this.y = y;
-        this.p = new Point((int)x,(int)y);
         this.imgName = imgName;
         this.width = width;
         this.height = height;
-        img = new ImageIcon("img/"+imgName);
-        label = new JLabel(img);
-        label.setBounds((int) x, (int) y, (int) width, (int) height);
         drawn = false;
+        rectangle = new Rectangle(x, y, width, height);
     }
 
     public void drawImage(Graphics g) {
         Image image = null;
         try {
-            image = ImageIO.read(new File("img/"+imgName));
+            image = ImageIO.read(new File("img/" + imgName));
         } catch (IOException e) {
             System.out.println("ERROR");
             e.printStackTrace();
@@ -62,22 +58,18 @@ public class Item {
     }
 
     // public void addImage() {
-    //     Main.game.add(label);
-    //     drawn = true;
+    // Main.game.add(label);
+    // drawn = true;
     // }
 
     // public void removeImage() {
-    //     Main.game.remove(label);
-    //     drawn = false;
+    // Main.game.remove(label);
+    // drawn = false;
     // }
 
     // public void setBounds() {
-    //     label.setBounds((int) x, (int) y, (int) width, (int) height);
+    // label.setBounds((int) x, (int) y, (int) width, (int) height);
     // }
-
-    public Rectangle getRectangle() {
-        return new Rectangle(x, y, width, height);
-    }
 
     public double getX() {
         return this.x;
@@ -95,12 +87,12 @@ public class Item {
         this.y = y;
     }
 
-    public Point getP(){
+    public Point getP() {
         return this.p;
     }
 
-    public void setP(double x, double y){
-        p = new Point((int)x,(int)y);
+    public void setP(double x, double y) {
+        p = new Point((int) x, (int) y);
     }
 
     public String getImgName() {
@@ -146,9 +138,20 @@ public class Item {
     public boolean isDrawn() {
         return this.drawn;
     }
-    
+
     public void setDrawn(boolean drawn) {
         this.drawn = drawn;
+    }
+
+    public Rectangle getRectangle() {
+        return rectangle;
+    }
+
+    public void setRectangle() {
+        rectangle.setX(x);
+        rectangle.setY(y);
+        rectangle.setWidth(width);
+        rectangle.setHeight(height);
     }
 
 }
