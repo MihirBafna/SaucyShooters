@@ -57,6 +57,18 @@ public class Item {
         g.drawImage(image, (int) x, (int) y, null);
     }
 
+    //draw image in different location than image position
+    public void drawImage(Graphics g,int a, int b) {
+        Image image = null;
+        try {
+            image = ImageIO.read(new File("img/" + imgName));
+        } catch (IOException e) {
+            System.out.println("ERROR");
+            e.printStackTrace();
+        }
+        g.drawImage(image, a, b, null);
+    }
+
     // public void addImage() {
     // Main.game.add(label);
     // drawn = true;

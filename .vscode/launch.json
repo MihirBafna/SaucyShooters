@@ -9,6 +9,13 @@
             "name": "CodeLens (Launch) - Game",
             "request": "launch",
             "mainClass": "Game",
+            "projectName": "SaucyShooters_81cdb343"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Game",
+            "request": "launch",
+            "mainClass": "Game",
             "projectName": "SaucyShooters_92290c91"
         },
         {
