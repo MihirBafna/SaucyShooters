@@ -176,6 +176,10 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
 
         g.drawImage(ammoGUI, screenwidth - 320 - 10, screenheight - 150 - 10, null);
 
+        if(player.getEquippedWeapon()!=null){
+            player.getEquippedWeapon().drawImage(g, screenwidth-80 -10, screenheight -82);
+        }
+
         repaint();
 
     }
