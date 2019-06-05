@@ -29,8 +29,8 @@ import javafx.scene.shape.Shape;
 
 public class Main extends JPanel implements ActionListener, KeyListener, MouseMotionListener, MouseListener {
     // fields behind the actual game
-    public static int screenwidth = 1000;
-    public static int screenheight = 600;
+    public static int screenwidth = 1600;
+    public static int screenheight = 900;
 
     private static enum State {
         MENU, GAME, WON

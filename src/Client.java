@@ -1,117 +1,69 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.net.UnknownHostException;
+// Java implementation for multithreaded chat client
+// Save file as Client.java
 
-public class Client {
-    private Socket socket;
-    private BufferedReader in;
-    private PrintWriter out;
-    private ClientListener clientListener;
-    private boolean open = true;
+import java.io.*;
+import java.net.*;
+import java.util.Scanner;
 
-    public Client(String ip, int port, ClientListener listener) {
-        clientListener = listener;
-        try {
-            socket = new Socket(ip, port);
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(socket.getOutputStream(), true);
-            Thread clientThread = new Thread(new Runnable() {
-                public void run() {
-                    while (open) {
-                        try {
-                            String s = in.readLine();
-                            if (s == null) {
-                                open = false;
-                                clientListener.disconnected();
-                                try {
-                                    if (socket != null)
-                                        socket.close();
-                                } catch (Exception exception) {
-                                    exception.printStackTrace();
-                                }
-                                try {
-                                    if (in != null)
-                                        in.close();
-                                } catch (Exception exception) {
-                                    exception.printStackTrace();
-                                }
-                                try {
-                                    if (out != null)
-                                        out.close();
-                                } catch (Exception exception) {
-                                    exception.printStackTrace();
-                                }
-                                return;
-                            }
-                            clientListener.recivedInput(s);
-                        } catch (IOException exception) {
-                            open = false;
-                            clientListener.serverClosed();
-                            try {
-                                socket.close();
-                            } catch (Exception exception1) {
-                                exception.printStackTrace();
-                            }
-                            try {
-                                in.close();
-                            } catch (Exception exception1) {
-                                exception.printStackTrace();
-                            }
-                            try {
-                                out.close();
-                            } catch (Exception exception1) {
-                                exception.printStackTrace();
-                            }
-                            return;
-                        } catch (Exception exception) {
-                            exception.printStackTrace();
-                        }
-                    }
-                }
-            });
-            clientThread.setName("Client Connection");
-            clientThread.setDaemon(true);
-            clientThread.start();
-            listener.connectedToServer();
-        } catch (UnknownHostException exception) {
-            open = false;
-            listener.unknownHost();
-        } catch (IOException exception) {
-            open = false;
-            listener.couldNotConnect();
-        } catch (Exception exception) {
-            open = false;
-            exception.printStackTrace();
-        }
-    }
+public class Client
+{
+	final static int ServerPort = 1234;
 
-    public void dispose() {
-        try {
-            if (open) {
-                open = false;
-                socket.close();
-                in.close();
-                out.close();
-                clientListener.disconnected();
-            }
-            socket = null;
-            in = null;
-            out = null;
-            clientListener = null;
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-    }
+	public static void main(String args[]) throws UnknownHostException, IOException
+	{
+		Scanner scn = new Scanner(System.in);
 
-    public void send(String msg) {
-        if (open)
-            out.println(msg);
-    }
+		// getting localhost ip
+		InetAddress ip = InetAddress.getByName("localhost");
 
-    public boolean isConnected() {
-        return open;
-    }
+		// establish the connection
+		Socket s = new Socket(ip, ServerPort);
+
+		// obtaining input and out streams
+		DataInputStream dis = new DataInputStream(s.getInputStream());
+		DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+
+		// sendMessage thread
+		Thread sendMessage = new Thread(new Runnable()
+		{
+			@Override
+			public void run() {
+				while (true) {
+
+					// read the message to deliver.
+					String msg = scn.nextLine();
+
+					try {
+						// write on the output stream
+						dos.writeUTF(msg);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+
+		// readMessage thread
+		Thread readMessage = new Thread(new Runnable()
+		{
+			@Override
+			public void run() {
+
+				while (true) {
+					try {
+						// read the message sent to this client
+						String msg = dis.readUTF();
+						System.out.println(msg);
+					} catch (IOException e) {
+
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+
+		sendMessage.start();
+		readMessage.start();
+
+	}
 }

@@ -1,133 +1,136 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
+// Java implementation of Server side
+// It contains two classes : Server and ClientHandler
+// Save file as Server.java
 
-public class Server {
-    private int port;
-    private boolean open = true;
-    private ServerSocket ss;
-    private ServerListener serverListener;
-    private ArrayList<Socket> clients = new ArrayList<>();
+import java.io.*;
+import java.util.*;
+import java.net.*;
 
-    public Server(int port, ServerListener listener) {
-        serverListener = listener;
-        try {
-            ss = new ServerSocket(port);
-            if (this.port == 0)
-                this.port = ss.getLocalPort();
-            else
-                this.port = port;
-            Thread serverThread = new Thread(new Runnable() {
-                public void run() {
-                    while (open) {
-                        try {
-                            @SuppressWarnings("resource")
-                            final Socket s = ss.accept();
-                            Thread clientThread = new Thread(new Runnable() {
-                                public void run() {
-                                    try {
-                                        clients.add(s);
-                                        BufferedReader in = new BufferedReader(
-                                                new InputStreamReader(s.getInputStream()));
-                                        PrintWriter out = new PrintWriter(s.getOutputStream(), true);
-                                        ClientInstance client = new ClientInstance(s.getInetAddress(), s.getPort());
-                                        serverListener.clientConncted(client, out);
-                                        while (open) {
-                                            try {
-                                                serverListener.recivedInput(client, in.readLine());
-                                            } catch (IOException e) {
-                                                serverListener.clientDisconnected(client);
-                                                try {
-                                                    if (!s.isClosed()) {
-                                                        s.shutdownOutput();
-                                                        s.close();
-                                                    }
-                                                } catch (Exception exception) {
-                                                    exception.printStackTrace();
-                                                }
-                                                clients.remove(s);
-                                                return;
-                                            }
-                                        }
-                                    } catch (Exception exception) {
-                                        exception.printStackTrace();
-                                    }
-                                    try {
-                                        s.close();
-                                    } catch (Exception exception) {
-                                        exception.printStackTrace();
-                                    }
-                                    clients.remove(s);
-                                }
-                            });
-                            clientThread.setDaemon(true);
-                            clientThread.setName("Client " + s.getInetAddress().toString());
-                            clientThread.start();
-                        } catch (SocketException e) { // Do nothing
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            });
-            serverThread.setDaemon(true);
-            serverThread.setName("Server");
-            serverThread.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+// Server class
+public class Server
+{
 
-    public void dispose() {
-        open = false;
-        try {
-            ss.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        for (Socket s : clients) {
-            try {
-                s.close();
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
-        }
-        clients.clear();
-        clients = null;
-        ss = null;
-        serverListener.serverClosed();
-        serverListener = null;
-    }
+	// Vector to store active clients
+	static Vector<ClientHandler> ar = new Vector<>();
 
-    public String getIp() {
-        try {
-            ss.getInetAddress();
-            return InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+	// counter for clients
+	static int i = 0;
 
-    @SuppressWarnings("resource")
-    public void kickClient(ClientInstance client){
+	public static void main(String[] args) throws IOException
+	{
+		// server is listening on port 1234
+		ServerSocket ss = new ServerSocket(1234);
+
 		Socket s;
-		for(int i = 0; i<clients.size(); i++){
-			s=clients.get(i);
-			if(client.ip==s.getInetAddress()&&s.getPort()==client.port){
-				try{
-					s.shutdownOutput();
-					s.close();
-				}catch(IOException e){ e.printStackTrace(); }
-				return;
-			}
+
+		// running infinite loop for getting
+		// client request
+		while (true)
+		{
+			// Accept the incoming request
+			s = ss.accept();
+
+			System.out.println("New client request received : " + s);
+
+			// obtain input and output streams
+			DataInputStream dis = new DataInputStream(s.getInputStream());
+			DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+
+			System.out.println("Creating a new handler for this client...");
+
+			// Create a new handler object for handling this request.
+			ClientHandler mtch = new ClientHandler(s,"client " + i, dis, dos);
+
+			// Create a new Thread with this object.
+			Thread t = new Thread(mtch);
+
+			System.out.println("Adding this client to active client list");
+
+			// add this client to active clients list
+			ar.add(mtch);
+
+			// start the thread.
+			t.start();
+
+			// increment i for new client.
+			// i is used for naming only, and can be replaced
+			// by any naming scheme
+			i++;
+
 		}
-    }
+	}
+}
+
+// ClientHandler class
+class ClientHandler implements Runnable
+{
+	Scanner scn = new Scanner(System.in);
+	private String name;
+	final DataInputStream dis;
+	final DataOutputStream dos;
+	Socket s;
+	boolean isloggedin;
+
+	// constructor
+	public ClientHandler(Socket s, String name,
+							DataInputStream dis, DataOutputStream dos) {
+		this.dis = dis;
+		this.dos = dos;
+		this.name = name;
+		this.s = s;
+		this.isloggedin=true;
+	}
+
+	@Override
+	public void run() {
+
+		String received;
+		while (true)
+		{
+			try
+			{
+				// receive the string
+				received = dis.readUTF();
+
+				System.out.println(received);
+
+				if(received.equals("logout")){
+					this.isloggedin=false;
+					this.s.close();
+					break;
+				}
+
+				// break the string into message and recipient part
+				StringTokenizer st = new StringTokenizer(received, "#");
+				String MsgToSend = st.nextToken();
+				String recipient = st.nextToken();
+
+				// search for the recipient in the connected devices list.
+				// ar is the vector storing client of active users
+				for (ClientHandler mc : Server.ar)
+				{
+					// if the recipient is found, write on its
+					// output stream
+					if (mc.name.equals(recipient) && mc.isloggedin==true)
+					{
+						mc.dos.writeUTF(this.name+" : "+MsgToSend);
+						break;
+					}
+				}
+			} catch (IOException e) {
+
+				e.printStackTrace();
+			}
+
+		}
+		try
+		{
+			// closing resources
+			this.dis.close();
+			this.dos.close();
+
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+	}
 }
