@@ -7,14 +7,17 @@ import java.util.Scanner;
 
 public class Client
 {
-	final static int ServerPort = 1234;
+	final static int ServerPort = 7777;
 
 	public static void main(String args[]) throws UnknownHostException, IOException
 	{
+		//System.out.println("running");
+		// Game game = new Game();
+
 		Scanner scn = new Scanner(System.in);
 
 		// getting localhost ip
-		InetAddress ip = InetAddress.getByName("localhost");
+		InetAddress ip = InetAddress.getByName("10.9.133.91");
 
 		// establish the connection
 		Socket s = new Socket(ip, ServerPort);
@@ -22,6 +25,7 @@ public class Client
 		// obtaining input and out streams
 		DataInputStream dis = new DataInputStream(s.getInputStream());
 		DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+
 
 		// sendMessage thread
 		Thread sendMessage = new Thread(new Runnable()

@@ -66,9 +66,9 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
     // ammos
     private Ammo light = new Ammo(20, 300, "light", 15, "lightammo.png", 10, 10);
 
-    public static void main(String[] args) {
-        Game game = new Game();
-    }
+    // public static void main(String[] args) {
+    //     Game game = new Game();
+    // }
 
     public void initializeWorld() {
         for (int i = 0; i < 10; i++) {

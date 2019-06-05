@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - Server",
+            "request": "launch",
+            "mainClass": "Server",
+            "projectName": "SaucyShooters_c8e1ea56"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - Game",
             "request": "launch",
             "mainClass": "Game",
