@@ -29,7 +29,7 @@ public class Player {
     private Inventory inventory;
     private Weapon equippedWeapon;
 
-    private String imgName;
+    private String imgName = "NEWCHARACTER4.png";
 
     public Player(String imgName, double x, double y, double speed, double hp, Color color) {
         this.imgName = imgName;

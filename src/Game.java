@@ -35,14 +35,15 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 public class Game extends JPanel implements ActionListener, KeyListener, MouseListener, MouseMotionListener {
 
     // instantiating all objects and other variables
-    public static int screenwidth = 1600;
-    public static int screenheight = 900;
+    public static int screenwidth = 1000;
+    public static int screenheight = 600;
     public static int displayX = 0;
     public static int displayY = 0;
 
@@ -55,6 +56,7 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
 
     Image background = null;
     Image ammoGUI = null;
+    Image playerImage = null;
 
     // public static HashMap<Point, Item> items = new HashMap<Point, Item>();
 
@@ -76,6 +78,12 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
             // c.setX(i * 200);
             // c.setY(i * 200);
             items.add(c);
+        }
+        try {
+            playerImage = ImageIO.read(new File("img/" + "NEWCHARACTER4.png"));
+        } catch (IOException e) {
+            System.out.println("ERROR");
+            e.printStackTrace();
         }
         player = new Player("NEWCHARACTER4.png", Game.screenwidth / 2, Game.screenheight / 2, 3.0, 15.0, Color.GREEN);
     }
@@ -154,9 +162,19 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
                 i.drawImage(g);
             }
         }
+
+
         for (Gun gun : player.getInventory().getGuns()) {
             if (gun != null) {
                 gun.drawBullets(g, player.getColor());
+            }
+        }
+        for(int i = 0; i<Client.playerPos.size();i++){
+            double x =Client.playerPos.get(i).getX();
+            double y = Client.playerPos.get(i).getY();
+            if(GameObject.collision(screen, new Circle(x,y, 50))&&i!=Client.clientnumber){
+                Item n = new Item(x, y, "player1.png", 100, 100);
+                n.drawImage(g);
             }
         }
         g.setColor(Color.MAGENTA);
