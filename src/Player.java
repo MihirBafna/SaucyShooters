@@ -20,7 +20,7 @@ public class Player {
     private double speed;
     private double hp;
     private Color color;
-
+    private boolean dead;
     private double velX;
     private double velY;
     private int size = 100;
@@ -202,6 +202,14 @@ public class Player {
 
     public double getVelX() {
         return this.velX;
+    }
+
+    public boolean getDead(){
+        return this.dead;
+    }
+
+    public void setDead(boolean x) {
+        this.dead = x;
     }
 
     public void setVelX(double velX) {

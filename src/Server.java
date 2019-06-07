@@ -15,12 +15,18 @@ public class Server
 
 	// Vector to store active clients
 	static Vector<ClientHandler> ar = new Vector<>();
+	private static final Random random = new Random();
 
 	// counter for clients
 	static int i = 0;
 
 	public static void main(String[] args) throws IOException{
-		// server is listening on port 1234
+		if (random.nextBoolean()) {
+			SoundEffect.cooldrums.play();
+		} else {
+			SoundEffect.vibeybeat.play();
+		}
+		SoundEffect.vibeybeat.play();
 		ServerSocket ss = new ServerSocket(7777);
 
 		Socket s;

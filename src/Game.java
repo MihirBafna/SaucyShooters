@@ -57,7 +57,8 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
     Image background = null;
     Image ammoGUI = null;
     Image playerImage = null;
-
+    Image dead = null;
+    Image youwin = null;
     // public static HashMap<Point, Item> items = new HashMap<Point, Item>();
 
     // weapons
@@ -125,6 +126,8 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
 
         // image = ImageIO.read(new File("img/ammoGUIA.gif"));
         ammoGUI = new ImageIcon("img/ammoGUIA4.gif").getImage();
+        dead = new ImageIcon("img/ammoGUIA4.gif").getImage();
+        youwin = new ImageIcon("img/ammoGUIA4.gif").getImage();
 
     }
 
@@ -155,7 +158,13 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
                 Game.screenwidth + (buffer * 2), Game.screenheight + (buffer * 2));
         g.translate(Game.displayX, Game.displayY);
         
+
         g.drawImage(background, -1920 / 2, -1080 / 2, null);
+
+        if(player.getDead()){
+            g.drawImage(dead, screenwidth/2, screenheight/2, 200, 200, null);
+        }
+
         for (Item i : items) {
             i.setRectangle();
             if (GameObject.collision(i.getRectangle(), screen)) {
