@@ -7,10 +7,11 @@ public class Crate extends Item {
 	private ArrayList<Weapon> weaponPool;
 	private ArrayList<Ammo> ammoPool;
 
-	public Crate(String imgName, double width, double height) {
+	public Crate(String imgName, double width, double height, int index) {
 		super(imgName, width, height);
 		this.ammoPool = Game.ammoPool;
 		this.weaponPool = Game.weaponPool;
+		super.index = index;
 		spawnable = false;
 		// change to map width height
 		while (!spawnable) {
@@ -25,10 +26,11 @@ public class Crate extends Item {
 		Game.objects.add(getRectangle());
 	}
 
-	public Crate(double x, double y, String imgName, double width, double height) {
+	public Crate(double x, double y, String imgName, double width, double height, int index) {
 		super(x, y, imgName, width, height);
 		this.ammoPool = Game.ammoPool;
 		this.weaponPool = Game.weaponPool;
+		super.index = index;
 		spawnable = false;
 		// change to map width height
 		// while (!spawnable) {

@@ -130,9 +130,11 @@ public class Player {
     }
 
     public void openCrate() {
+        int index = -1;
         for (Item c : Game.items) {
             if (c instanceof Crate) {
                 if (GameObject.collision(circle, c.getRectangle())) {
+                    index = c.getIndex();
                     Game.objects.remove(c.getRectangle());
                     Game.items.remove(c);
                     Weapon w = ((Crate) c).generateWeapon();
@@ -143,6 +145,7 @@ public class Player {
                 }
             }
         }
+
     }
 
     public int getEquippedAmmo() {

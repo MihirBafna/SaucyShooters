@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import javafx.scene.shape.Circle;
+
 public class Gun extends Weapon {
 
     private double range;
@@ -21,7 +23,7 @@ public class Gun extends Weapon {
     private double bulletSpeed;
     private double bulletSize;
 
-    private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+    public ArrayList<Bullet> bullets = new ArrayList<Bullet>();
     private boolean shootable;
     private boolean reloading;
 
@@ -163,6 +165,15 @@ public class Gun extends Weapon {
     public void update() {
         deleteBullets();
         moveBullets();
+        for (Bullet b : bullets) {
+            for(int i = 0; i<Client.playerPos.size();i++){
+                double x =Client.playerPos.get(i).getX();
+                double y = Client.playerPos.get(i).getY();
+                if(GameObject.collision(b.getCircle(), new Circle(x,y, 50))&&i!=Client.clientnumber){
+                    Client.deadPlayers.add(i);
+                }
+            }
+        }
     }
 
     public double getRange() {

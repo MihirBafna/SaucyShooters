@@ -63,7 +63,7 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
     // weapons
     private Gun shotgun = new Gun(500, 250, 100, 20, 12, 12, "light", 3000, 1000, 4, .15, 10, 20, 100, "shotgun.png",
             30, 15);
-    private Gun AR = new Gun(900, 700, 33, 20, 30, 30, "light", 2000, 333, 1, 0, 10, 20, 100, "AR.png", 30, 15);
+    private Gun AR = new Gun(900, 700, 33, 20, 30, 30, "light", 2000, 333, 1, 0, 10, 20, 100, "ar.png", 30, 15);
 
     // ammos
     private Ammo light = new Ammo(20, 300, "light", 15, "lightammo.png", 10, 10);
@@ -74,7 +74,7 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
 
     public void initializeWorld() {
         for (int i = 0; i < 10; i++) {
-            Crate c = new Crate(i * 200, i * 200, "Crate_100x100.png", 100, 100);
+            Crate c = new Crate(i * 200, i * 200, "Crate_100x100.png", 100, 100, i);
             // c.setX(i * 200);
             // c.setY(i * 200);
             items.add(c);
@@ -121,7 +121,7 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
         f.setVisible(true);
 
         // image = ImageIO.read(new File("img/ammoGUIA.gif"));
-        background = new ImageIcon("img/map sketch.png").getImage();
+        background = new ImageIcon("img/bigmap.png").getImage();
 
         // image = ImageIO.read(new File("img/ammoGUIA.gif"));
         ammoGUI = new ImageIcon("img/ammoGUIA4.gif").getImage();
@@ -173,7 +173,7 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
             double x =Client.playerPos.get(i).getX();
             double y = Client.playerPos.get(i).getY();
             if(GameObject.collision(screen, new Circle(x,y, 50))&&i!=Client.clientnumber){
-                Item n = new Item(x, y, "player1.png", 100, 100);
+                Item n = new Item(x -50 , y- 50, "NEWCHARACTER4.png", 100, 100);
                 n.drawImage(g);
             }
         }
@@ -276,7 +276,7 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
         }
 
         if (e.getKeyCode() == e.VK_O) {
-            player.openCrate();
+           player.openCrate();
         }
 
     }

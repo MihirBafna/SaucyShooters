@@ -23,6 +23,7 @@ public class Item {
     private JLabel label;
     private boolean drawn;
     private Rectangle rectangle;
+    protected int index;
 
     public Item() {
 
@@ -157,6 +158,10 @@ public class Item {
 
     public Rectangle getRectangle() {
         return rectangle;
+    }
+
+    public int getIndex(){
+        return this.index;
     }
 
     public void setRectangle() {
