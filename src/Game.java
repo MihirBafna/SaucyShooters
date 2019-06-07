@@ -126,8 +126,8 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
 
         // image = ImageIO.read(new File("img/ammoGUIA.gif"));
         ammoGUI = new ImageIcon("img/ammoGUIA4.gif").getImage();
-        dead = new ImageIcon("img/ammoGUIA4.gif").getImage();
-        youwin = new ImageIcon("img/ammoGUIA4.gif").getImage();
+        dead = new ImageIcon("img/dead.png").getImage();
+        youwin = new ImageIcon("img/youwin.png").getImage();
 
     }
 
