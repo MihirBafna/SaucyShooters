@@ -20,7 +20,7 @@ public class Player {
     private double speed;
     private double hp;
     private Color color;
-    private boolean dead;
+    private boolean dead = false;
     private double velX;
     private double velY;
     private int size = 100;

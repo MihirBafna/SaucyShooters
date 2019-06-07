@@ -162,7 +162,7 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
         g.drawImage(background, -1920 / 2, -1080 / 2, null);
 
         if(player.getDead()){
-            g.drawImage(dead, screenwidth/2, screenheight/2, 200, 200, null);
+            g.drawImage(dead, screenwidth/2, screenheight/2, 400, 250, null);
         }
 
         for (Item i : items) {
