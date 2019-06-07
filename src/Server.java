@@ -1,14 +1,12 @@
-
-// Java implementation of Server side
-// It contains two classes : Server and ClientHandler
-// Save file as Server.java
-
 import java.awt.Point;
 import java.io.*;
 import java.util.*;
 import java.net.*;
 
-// Server class
+/**
+ * Server.java contains a Server class and a ClientHandler class
+ * Server opens up the socket for communication between clients (also on a separate thread)
+ */
 public class Server
 {
 	static ArrayList<Point> playerPos = new ArrayList<Point>();
@@ -20,13 +18,16 @@ public class Server
 	// counter for clients
 	static int i = 0;
 
+	/**
+	 * main method plays game music, starts the server socket, and waits for client connection to establish the input/outputstreams
+	 */
+
 	public static void main(String[] args) throws IOException{
 		if (random.nextBoolean()) {
 			SoundEffect.cooldrums.play();
 		} else {
 			SoundEffect.vibeybeat.play();
 		}
-		SoundEffect.vibeybeat.play();
 		ServerSocket ss = new ServerSocket(7777);
 
 		Socket s;
@@ -70,7 +71,9 @@ public class Server
 	}
 }
 
-// ClientHandler class
+/**
+ * ClientHandler is the class responsible for handling the data transfer of any number of clients on multiple threads
+ */
 class ClientHandler implements Runnable
 {
 	Scanner scn = new Scanner(System.in);
@@ -82,7 +85,13 @@ class ClientHandler implements Runnable
 	public static ArrayList<Integer> deadPlayers = new ArrayList<Integer>();
 
 
-	// constructor
+	/**
+	 * Constructor
+	 * @param Socket
+	 * @param int
+	 * @param DataInputStream
+	 * @param DataOutputStream
+	 */
 	public ClientHandler(Socket s, int i,
 							DataInputStream dis, DataOutputStream dos) {
 		this.dis = dis;
@@ -92,6 +101,9 @@ class ClientHandler implements Runnable
 		this.isloggedin=true;
 	}
 
+	/** 
+	 * this run method creates a infinite loop that handles all the data transfer between the other clients
+	*/
 	@Override
 	public void run() {
 		double receivedX;
@@ -101,8 +113,6 @@ class ClientHandler implements Runnable
 		{
 			try
 			{
-
-
 				receivedX = dis.readDouble();
 				receivedY = dis.readDouble();
 				
@@ -124,31 +134,7 @@ class ClientHandler implements Runnable
 				if(receivedX == -1){
 					break;
 				}
-				// System.out.println(received);
 
-				// if(received.equals("logout")){
-				// 	this.isloggedin=false;
-				// 	this.s.close();
-				// 	break;
-				// }
-
-				// break the string into message and recipient part
-				// StringTokenizer st = new StringTokenizer(received, "#");
-				// String MsgToSend = st.nextToken();
-				// String recipient = st.nextToken();
-
-				// // search for the recipient in the connected devices list.
-				// // ar is the vector storing client of active users
-				// for (ClientHandler mc : Server.ar)
-				// {
-				// 	// if the recipient is found, write on its
-				// 	// output stream
-				// 	if (mc.name.equals(recipient) && mc.isloggedin==true)
-				// 	{
-				// 		mc.dos.writeUTF(this.name+" : "+MsgToSend);
-				// 		break;
-				// 	}
-				// }
 			} catch (IOException e) {
 
 				e.printStackTrace();
