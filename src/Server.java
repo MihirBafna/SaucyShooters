@@ -88,7 +88,7 @@ class ClientHandler implements Runnable
 
 	@Override
 	public void run() {
-
+		String received;
 		double receivedX;
 		double receivedY;
 		int deadsize = 0;
@@ -96,8 +96,8 @@ class ClientHandler implements Runnable
 		{
 			try
 			{
-				// receive the string
-				// received = dis.readUTF();
+
+
 				receivedX = dis.readDouble();
 				receivedY = dis.readDouble();
 				

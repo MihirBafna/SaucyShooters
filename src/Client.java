@@ -24,7 +24,7 @@ public class Client
 		Scanner scn = new Scanner(System.in);
 
 		// getting localhost ip
-		InetAddress ip = InetAddress.getByName("172.20.10.8");
+		InetAddress ip = InetAddress.getByName("localhost");
 
 		// establish the connection
 		Socket s = new Socket(ip, ServerPort);
@@ -82,6 +82,7 @@ public class Client
 						for(int k = 0; k<num;k++){
 							if(dis.readInt()==clientnumber){
 								System.out.println(clientnumber+" is dead");
+								break;
 							}
 						}
 						// for(int i=0;i<size;i++){
