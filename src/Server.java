@@ -88,7 +88,6 @@ class ClientHandler implements Runnable
 
 	@Override
 	public void run() {
-		String received;
 		double receivedX;
 		double receivedY;
 		int deadsize = 0;
