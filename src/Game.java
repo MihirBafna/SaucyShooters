@@ -73,6 +73,9 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
     //     Game game = new Game();
     // }
 
+    /**
+     * initializes world with crates and players
+     */
     public void initializeWorld() {
         for (int i = 0; i < 10; i++) {
             Crate c = new Crate(i * 200, i * 200, "Crate_100x100.png", 100, 100, i);
@@ -89,6 +92,9 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
         player = new Player("NEWCHARACTER4.png", Game.screenwidth / 2, Game.screenheight / 2, 3.0, 15.0, Color.GREEN);
     }
 
+    /**
+     * creates jframe and adds objects to specified arraylists
+     */
     public Game() {
         // making JFrame
         JFrame f = new JFrame();
@@ -133,6 +139,9 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
 
     Timer t;
 
+    /**
+     * updates player and gun positions
+     */
     public void update() {
         player.move();
         for (Gun gun : player.getInventory().getGuns()) {
@@ -149,6 +158,10 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
         repaint();
     }
 
+    /**
+     * @param g
+     * draws images based on if theyre on the screen
+     */
     @Override
     public void paint(Graphics g) {
         // paints images/font/progress bars
@@ -238,12 +251,18 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
         // }
     }
 
+    /**
+     * returns dimension
+     */
     @Override
     public Dimension getPreferredSize() {
         // dimension of window
         return new Dimension(Game.screenwidth, Game.screenheight);
     }
 
+    /**
+     * does stuff based on keypress
+     */
     @Override
     public void keyPressed(KeyEvent e) {
         // movement
@@ -295,18 +314,27 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
         // TODO Auto-generated method stub
     }
 
+    /**
+     * rotates player based on mouse position
+     */
     @Override
     public void mouseMoved(MouseEvent arg0) {
         // TODO Auto-generated method stub
         player.setTheta(arg0.getX() - displayX, arg0.getY() - displayY);
     }
 
+    /**
+     * shoots
+     */
     @Override
     public void mouseClicked(MouseEvent arg0) {
         // TODO Auto-generated method stub
         player.shoot(arg0.getX() - displayX, arg0.getY() - displayY);
     }
 
+    /**
+     * changes mouse image to a crosshair
+     */
     @Override
     public void mouseEntered(MouseEvent arg0) {
         // TODO Auto-generated method stub
@@ -331,6 +359,9 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
         // TODO Auto-generated method stub
     }
 
+    /**
+     * movement 
+     */
     @Override
     public void keyReleased(KeyEvent arg0) {
         // TODO Auto-generated method stub

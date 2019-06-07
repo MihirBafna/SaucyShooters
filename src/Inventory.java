@@ -12,6 +12,12 @@ public class Inventory {
     private int ammoSlots;
     private int grenadeSlots;
 
+    /**
+     * @param gunSlots
+     * @param ammoSlots
+     * @param grenadeSlots
+     * creates inventory with slots for each player
+     */
     public Inventory(int gunSlots, int ammoSlots, int grenadeSlots) {
         guns = new ArrayList<Gun>();
         ammos = new ArrayList<Ammo>();
@@ -24,6 +30,9 @@ public class Inventory {
         nullify();
     }
 
+    /**
+     * makes every array element null
+     */
     public void nullify() {
         for(int g = 0; g < gunSlots; g++){
             guns.add(null);
@@ -36,6 +45,11 @@ public class Inventory {
         }
     }
 
+    /**
+     * @param gun
+     * adds gun to arraylist
+     * removes a gun aswell if list is full
+     */
     public void addGun(Gun gun) {
         ArrayList<Gun> guns = Game.player.getInventory().getGuns();
         for (int g = 0; g < guns.size(); g++) {
@@ -66,6 +80,11 @@ public class Inventory {
         }
     }
 
+    /**
+     * @param grenade
+     * adds grenade to arraylist
+     * removes a grenade as well if list is full
+     */
     public void addGrenade(Grenade grenade) {
         ArrayList<Grenade> grenades = Game.player.getInventory().getGrenades();
         for (int g = 0; g < grenades.size(); g++) {
@@ -92,6 +111,11 @@ public class Inventory {
         }
     }
 
+    /**
+     * @param ammo
+     * adds ammo to arraylist
+     * removes an ammo as well if list is full
+     */
     public void addAmmo(Ammo ammo) {
         ArrayList<Ammo> ammos = Game.player.getInventory().getAmmos();
         for (int a = 0; a < ammos.size(); a++) {

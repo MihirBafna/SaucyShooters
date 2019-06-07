@@ -31,23 +31,41 @@ public class Player {
 
     private String imgName = "NEWCHARACTER4.png";
 
+    private int score;
+
+    /**
+     * @param imgName
+     * @param x
+     * @param y
+     * @param speed
+     * @param hp
+     * @param color
+     */
     public Player(String imgName, double x, double y, double speed, double hp, Color color) {
         this.imgName = imgName;
         this.x = x;
         this.y = y;
         this.speed = speed;
         this.color = color;
+        score = 0;
         circle = new Circle(x, y, size / 2);
         inventory = new Inventory(2, 3, 2);
         equippedWeapon = null;
     }
 
+    /**
+     * @param mouseX
+     * @param mouseY shoots equipped gun based on position of mouse and player
+     */
     public void shoot(double mouseX, double mouseY) {
         if (equippedWeapon != null) {
             equippedWeapon.shoot(mouseX, mouseY, x, y);
         }
     }
 
+    /**
+     * reloads equipped gun
+     */
     public void reload() {
         if (equippedWeapon instanceof Gun) {
             for (Ammo ammo : inventory.getAmmos()) {
@@ -58,6 +76,9 @@ public class Player {
         }
     }
 
+    /**
+     * moves player changes displayX,Y
+     */
     public void move() {
         Game.displayX -= velX;
         Game.displayY -= velY;
@@ -67,6 +88,9 @@ public class Player {
         circle.setCenterY(y);
     }
 
+    /**
+     * @param g draws player in center of screen
+     */
     public void drawImage(Graphics g) {
         int drawX = (int) Game.screenwidth / 2;
         int drawY = (int) Game.screenheight / 2;
@@ -110,6 +134,9 @@ public class Player {
 
     // }
 
+    /**
+     * picks up an item off the ground
+     */
     public void gather() {
         for (Item i : Game.items) {
             if (GameObject.collision(circle, i.getRectangle())) {
@@ -129,11 +156,15 @@ public class Player {
         }
     }
 
+    /**
+     * opens up crates
+     */
     public void openCrate() {
         int index = -1;
         for (Item c : Game.items) {
             if (c instanceof Crate) {
                 if (GameObject.collision(circle, c.getRectangle())) {
+                    score++;
                     index = c.getIndex();
                     Game.objects.remove(c.getRectangle());
                     Game.items.remove(c);
@@ -148,6 +179,9 @@ public class Player {
 
     }
 
+    /**
+     * @return amount of ammo that equipped gun can use
+     */
     public int getEquippedAmmo() {
         int amount = 0;
         for (Ammo a : inventory.getAmmos()) {
@@ -204,7 +238,7 @@ public class Player {
         return this.velX;
     }
 
-    public boolean getDead(){
+    public boolean getDead() {
         return this.dead;
     }
 
@@ -270,6 +304,14 @@ public class Player {
             nextEquipped.setEquipped(true);
         }
         equippedWeapon = nextEquipped;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
 }

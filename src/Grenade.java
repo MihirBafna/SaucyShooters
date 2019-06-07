@@ -1,6 +1,22 @@
 
 public class Grenade extends Weapon {
 
+    /**
+     * 
+     * 
+     * 
+     * 
+     * 
+     * CLASS IS NOT USED
+     * DO NOT GRADE
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+
+
     private double radius1;
     private double radius2;
     private double r1Damage;

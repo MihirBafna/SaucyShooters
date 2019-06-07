@@ -24,6 +24,17 @@ public class Bullet {
     private double size;
     private Circle circle;
 
+    /**
+     * @param initX
+     * @param initY
+     * @param range
+     * @param rangeFallOff
+     * @param damage
+     * @param damageFallOff
+     * @param velX
+     * @param velY
+     * @param size
+     */
     public Bullet(double initX, double initY, double range, double rangeFallOff, double damage, double damageFallOff,
             double velX, double velY, double size) {
         this.initX = initX;
@@ -37,6 +48,9 @@ public class Bullet {
         circle = new Circle(x, y, size / 2);
     }
 
+    /**
+     * moves the bullet and updates the hitbox
+     */
     public void move() {
         x += velX;
         y += velY;
@@ -45,6 +59,11 @@ public class Bullet {
         damageUpdate();
     }
 
+    /**
+     * @param g
+     * @param c
+     * draws bullet of color c at x,y
+     */
     public void draw(Graphics g, Color c) {
         g.setColor(c);
         // g.fillOval((int) (x - size / 2), (int) (y - size / 2), (int) size, (int)
@@ -59,6 +78,9 @@ public class Bullet {
         g.drawImage(image, (int) (x - size / 2), (int) (y - size / 2), null);
     }
 
+    /**
+     * decreases amount of damage based on how far bullet travels
+     */
     public void damageUpdate() {
         double squareAB = (double) (Math.pow(x - initX, 2) + Math.pow(y - initY, 2));
         double hypotenuse = Math.sqrt(squareAB);
@@ -74,6 +96,9 @@ public class Bullet {
         }
     }
 
+    /**
+     * deletes bullet if hits an object or reaches max range
+     */
     public boolean expire() {
         // pythagorean theorem to check hypotenuse
         double squareAB = (double) (Math.pow(x - initX, 2) + Math.pow(y - initY, 2));

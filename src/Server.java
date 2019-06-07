@@ -107,20 +107,20 @@ class ClientHandler implements Runnable
 				receivedY = dis.readDouble();
 				
 				Server.playerPos.set(i,new Point((int)receivedX,(int)receivedY));
-				deadsize = dis.readInt();
-				for(int k = 0; k<deadsize;k++){
-					deadPlayers.add(dis.readInt());
-				}
+				// deadsize = dis.readInt();
+				// for(int k = 0; k<deadsize;k++){
+				// 	deadPlayers.add(dis.readInt());
+				// }
 				this.dos.writeInt(Server.i);
 				this.dos.writeInt(this.i);
 				for(int j =0; j<Server.i;j++){
 					this.dos.writeDouble(Server.playerPos.get(j).getX());
 					this.dos.writeDouble(Server.playerPos.get(j).getY());
 				}
-				this.dos.writeInt(deadPlayers.size());
-				for (int k = 0; k < deadPlayers.size(); k++) {
-					this.dos.writeInt(deadPlayers.get(k).intValue());
-				}
+				// this.dos.writeInt(deadPlayers.size());
+				// for (int k = 0; k < deadPlayers.size(); k++) {
+				// 	this.dos.writeInt(deadPlayers.get(k).intValue());
+				// }
 				if(receivedX == -1){
 					break;
 				}

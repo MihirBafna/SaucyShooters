@@ -7,6 +7,13 @@ public class Crate extends Item {
 	private ArrayList<Weapon> weaponPool;
 	private ArrayList<Ammo> ammoPool;
 
+	/**
+	 * @param imgName
+	 * @param width
+	 * @param height
+	 * @param index
+	 * generates crate with random x,y
+	 */
 	public Crate(String imgName, double width, double height, int index) {
 		super(imgName, width, height);
 		this.ammoPool = Game.ammoPool;
@@ -26,6 +33,16 @@ public class Crate extends Item {
 		Game.objects.add(getRectangle());
 	}
 
+
+	/**
+	 * @param x
+	 * @param y
+	 * @param imgName
+	 * @param width
+	 * @param height
+	 * @param index
+	 * generates crate with specified x,y
+	 */
 	public Crate(double x, double y, String imgName, double width, double height, int index) {
 		super(x, y, imgName, width, height);
 		this.ammoPool = Game.ammoPool;
@@ -44,6 +61,9 @@ public class Crate extends Item {
 		Game.objects.add(getRectangle());
 	}
 
+	/**
+	 * @return total droprate of weapons
+	 */
 	public double totalWeaponFrequency() {
 		double totalWeaponFrequency = 0;
 		for (Weapon w : weaponPool) {
@@ -52,6 +72,9 @@ public class Crate extends Item {
 		return totalWeaponFrequency;
 	}
 
+	/**
+	 * @return total droprate of ammo
+	 */
 	public double totalAmmoFrequency() {
 		double totalAmmoFrequency = 0;
 		for (Ammo a : ammoPool) {
@@ -60,6 +83,9 @@ public class Crate extends Item {
 		return totalAmmoFrequency;
 	}
 
+	/**
+	 * @return random weapon in weaponpool
+	 */
 	public Weapon generateWeapon() {
 		double random = Math.random() * totalWeaponFrequency();
 		double lowerBound = 0;
@@ -72,17 +98,15 @@ public class Crate extends Item {
 					Gun drop = new Gun(getX(), getY(), temp);
 					return drop;
 				}
-				if (w instanceof Grenade) {
-					Grenade temp = (Grenade) w;
-					Grenade drop = new Grenade(getX(), getY(), temp);
-					// return drop;
-				}
 			}
 			lowerBound = upperBound;
 		}
 		return null;
 	}
 
+	/**
+	 * @return random ammo in ammopool
+	 */
 	public Ammo generateAmmo() {
 		double random = Math.random() * totalAmmoFrequency();
 		double lowerBound = 0;
@@ -99,6 +123,9 @@ public class Crate extends Item {
 		return null;
 	}
 
+	/**
+	 * @return true if crate can spawn without interference
+	 */
 	public boolean legalSpawn() {
 		for (int i = 0; i < Game.objects.size(); i++) {
 			if (GameObject.collision(getRectangle(), Game.objects.get(i))) {

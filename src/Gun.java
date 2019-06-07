@@ -27,7 +27,12 @@ public class Gun extends Weapon {
     private boolean shootable;
     private boolean reloading;
 
-    // clone
+    /**
+     * @param x
+     * @param y
+     * @param gun
+     * clones gun and gives pos x,y
+     */
     public Gun(double x, double y, Gun gun) {
         super(gun.getDropRate(), x, y, gun.getImgName(), gun.getWidth(), gun.getHeight());
         this.range = gun.range;
@@ -48,6 +53,25 @@ public class Gun extends Weapon {
         reloading = false;
     }
 
+    /**
+     * @param range
+     * @param rangeFallOff
+     * @param damage
+     * @param damageFallOff
+     * @param magazine
+     * @param magazineSize
+     * @param ammoType
+     * @param reloadSpeed
+     * @param fireSpeed
+     * @param bulletsPerShot
+     * @param bulletSpread
+     * @param bulletSpeed
+     * @param bulletSize
+     * @param dropRate
+     * @param imgName
+     * @param width
+     * @param height
+     */
     public Gun(double range, double rangeFallOff, double damage, double damageFallOff, int magazine, int magazineSize,
             String ammoType, double reloadSpeed, double fireSpeed, int bulletsPerShot, double bulletSpread,
             double bulletSpeed, double bulletSize, double dropRate, String imgName, double width, double height) {
@@ -70,6 +94,13 @@ public class Gun extends Weapon {
         reloading = false;
     }
 
+    /**
+     * @param mouseX
+     * @param mouseY
+     * @param playerX
+     * @param playerY
+     * creates bullets based on mouse position and player position
+     */
     public void shoot(double mouseX, double mouseY, double playerX, double playerY) {
         if (shootable) {
             shootable = false;
@@ -112,6 +143,10 @@ public class Gun extends Weapon {
         }
     }
 
+    /**
+     * @param ammo
+     * reloads gun after certain delay
+     */
     public void reload(Ammo ammo) {
         if (ammo.getType().equals(ammoType)) {
             if (magazine < magazineSize) {
@@ -141,6 +176,9 @@ public class Gun extends Weapon {
         }
     }
 
+    /**
+     * removes bullets from arraylist if they expire
+     */
     public void deleteBullets() {
         for (int i = 0; i < bullets.size(); i++) {
             if (bullets.get(i).expire()) {
@@ -150,30 +188,41 @@ public class Gun extends Weapon {
         }
     }
 
+    /**
+     * moves all bullets in arraylist
+     */
     public void moveBullets() {
         for (Bullet b : bullets) {
             b.move();
         }
     }
 
+    /**
+     * @param g
+     * @param c
+     * draws all bullets in arraylist
+     */
     public void drawBullets(Graphics g, Color c) {
         for (Bullet b : bullets) {
             b.draw(g, c);
         }
     }
 
+    /**
+     * updates bullets in arraylist
+     */
     public void update() {
         deleteBullets();
         moveBullets();
-        for (Bullet b : bullets) {
-            for(int i = 0; i<Client.playerPos.size();i++){
-                double x =Client.playerPos.get(i).getX();
-                double y = Client.playerPos.get(i).getY();
-                if(GameObject.collision(b.getCircle(), new Circle(x,y, 50))&&i!=Client.clientnumber){
-                    Client.deadPlayers.add(i);
-                }
-            }
-        }
+        // for (Bullet b : bullets) {
+        //     for(int i = 0; i<Client.playerPos.size();i++){
+        //         double x =Client.playerPos.get(i).getX();
+        //         double y = Client.playerPos.get(i).getY();
+        //         if(GameObject.collision(b.getCircle(), new Circle(x,y, 50))&&i!=Client.clientnumber){
+        //             Client.deadPlayers.add(i);
+        //         }
+        //     }
+        // }
     }
 
     public double getRange() {

@@ -24,7 +24,7 @@ public class Client
 		Scanner scn = new Scanner(System.in);
 
 		// getting localhost ip
-		InetAddress ip = InetAddress.getByName("localhost");
+		InetAddress ip = InetAddress.getByName("172.20.10.8");
 
 		// establish the connection
 		Socket s = new Socket(ip, ServerPort);
@@ -48,11 +48,11 @@ public class Client
 						// write on the output stream
 						dos.writeDouble(player.getX());
 						dos.writeDouble(player.getY());
-						int deadsize = deadPlayers.size();
-						dos.writeInt(deadsize);
-						for(int k = 0; k<deadsize;k++){
-							dos.writeInt(deadPlayers.get(k).intValue());
-						}
+						// int deadsize = deadPlayers.size();
+						// dos.writeInt(deadsize);
+						// for(int k = 0; k<deadsize;k++){
+						// 	dos.writeInt(deadPlayers.get(k).intValue());
+						// }
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -78,13 +78,13 @@ public class Client
 						for(int i = 0; i<size;i++){
 							playerPos.set(i,new Point((int)dis.readDouble(),(int)dis.readDouble()));
 						}
-						int num = dis.readInt();
-						for(int k = 0; k<num;k++){
-							if(dis.readInt()==clientnumber){
-								System.out.println(clientnumber+" is dead");
-								player.setDead(true);
-							}
-						}
+						// int num = dis.readInt();
+						// for(int k = 0; k<num;k++){
+						// 	if(dis.readInt()==clientnumber){
+						// 		System.out.println(clientnumber+" is dead");
+						// 		player.setDead(true);
+						// 	}
+						// }
 						// for(int i=0;i<size;i++){
 						// 	System.out.println(playerPos.get(i).getX()+","+ playerPos.get(i).getY());
 						// }

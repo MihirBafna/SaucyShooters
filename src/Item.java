@@ -29,6 +29,11 @@ public class Item {
 
     }
 
+    /**
+     * @param imgName
+     * @param width
+     * @param height
+     */
     public Item(String imgName, double width, double height) {
         this.imgName = imgName;
         this.width = width;
@@ -37,6 +42,13 @@ public class Item {
         rectangle = new Rectangle(-10000, -10000, width, height);
     }
 
+    /**
+     * @param x
+     * @param y
+     * @param imgName
+     * @param width
+     * @param height
+     */
     public Item(double x, double y, String imgName, double width, double height) {
         this.x = x;
         this.y = y;
@@ -47,6 +59,10 @@ public class Item {
         rectangle = new Rectangle(x, y, width, height);
     }
 
+    /**
+     * @param g
+     * draws item
+     */
     public void drawImage(Graphics g) {
         Image image = null;
         try {
@@ -58,7 +74,12 @@ public class Item {
         g.drawImage(image, (int) x, (int) y, null);
     }
 
-    //draw image in different location than image position
+    /**
+     * @param g
+     * @param a
+     * @param b
+     * draws image in different location than image position
+     */
     public void drawImage(Graphics g,int a, int b) {
         Image image = null;
         try {

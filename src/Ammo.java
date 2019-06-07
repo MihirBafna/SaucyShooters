@@ -6,6 +6,12 @@ public class Ammo extends Item{
     private String type;
     private double dropRate;
 
+    /**
+    * @param x
+    * @param y
+    * @param ammo
+    * creats a clone of the ammo at point x,y
+    */
     public Ammo(double x, double y, Ammo ammo) {
         super(x, y, ammo.getImgName(), ammo.getWidth(), ammo.getHeight());
         this.amount = ammo.amount;
@@ -15,6 +21,15 @@ public class Ammo extends Item{
         this.dropRate = ammo.dropRate;
     }
     
+    /**
+     * @param pileAmount
+     * @param stackSize
+     * @param type
+     * @param dropRate
+     * @param imgName
+     * @param width
+     * @param height
+     */
     public Ammo(int pileAmount, int stackSize, String type, double dropRate, String imgName, double width, double height) {
         super(imgName, width, height);
         this.pileAmount = pileAmount;
@@ -23,10 +38,18 @@ public class Ammo extends Item{
         this.dropRate = dropRate;
     }
 
+    /**
+     * @param num
+     * increases amount of ammo by num
+     */
     public void add(int num){
         amount += num;
     }
 
+    /**
+     * @param num
+     * decreases amount of ammo by num
+     */
     public void subtract(int num){
         amount -= num;
     }

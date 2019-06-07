@@ -27,6 +27,17 @@ import javax.swing.Timer;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
+/**
+ * 
+ * 
+ * 
+ * CLASS IS NOT USED
+ * DO NOT GRADE
+ * 
+ * 
+ * 
+ */
+
 public class Main extends JPanel implements ActionListener, KeyListener, MouseMotionListener, MouseListener {
     // fields behind the actual game
     public static int screenwidth = 1000;
