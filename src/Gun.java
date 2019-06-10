@@ -22,7 +22,6 @@ public class Gun extends Weapon {
     private double bulletSpread;
     private double bulletSpeed;
     private double bulletSize;
-
     public ArrayList<Bullet> bullets = new ArrayList<Bullet>();
     private boolean shootable;
     private boolean reloading;
@@ -197,7 +196,7 @@ public class Gun extends Weapon {
                 Player p = Game.players.get(i);
                 if(GameObject.collision(new Circle(b.getX(),b.getY(),b.getSize()/2),new Circle(p.getX(),p.getY(),50))&& i!=Client.clientnumber){
                     System.out.println("in"+ p.getX()+ "b:"+b.getX()+" "+i);
-                    Game.players.get(i).setDead(true);
+                    Game.players.get(Client.clientnumber).setWon(true);
                 }
             }
             b.move();

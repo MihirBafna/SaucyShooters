@@ -115,6 +115,10 @@ class ClientHandler implements Runnable
 				}
 				oos.writeInt(i) ;
 				Player p = (Player)this.ois.readObject();
+				if(p.isWon()){
+					this.s.close();
+					break;
+				}
 				Server.players.set(i, p); 
 				// System.out.println(i+" "+Server.players.get(i).getX());
 				int size = Server.players.size();

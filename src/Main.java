@@ -71,7 +71,7 @@ public class Main extends JPanel implements ActionListener, KeyListener, MouseMo
 
     public Main() {
         // added JLables
-        JLabel background = new JLabel(new ImageIcon("img/saucyshooterbackground.png"));
+        JLabel background = new JLabel(new ImageIcon("img/nightbackground.png"));
         JLabel title = new JLabel(new ImageIcon("img/saucyshooters.png"));
         JLabel music = new JLabel(new ImageIcon("img/saucymusic.png"));
         JLabel controls = new JLabel(new ImageIcon("img/controls.png"));

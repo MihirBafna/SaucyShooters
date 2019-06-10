@@ -36,18 +36,16 @@ public class Client {
 		Thread sendData = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				while (true) {
+				while (true) { 
 					try {
 						synchronized(Game.player){
 							oos.reset();
 							// write on the output stream
 							oos.writeObject(Game.player);
+							if(Game.player.isWon()){
+								break;
+							}
 						}
-						// boolean exit = false;
-						// if (Game.players.get(clientnumber).getHp() <= 0) {
-						// exit = true;
-						// }
-						// oos.writeBoolean(exit);
 
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -76,15 +74,6 @@ public class Client {
 								Game.players.set(i, p);
 								// System.out.println("Client "+clientnumber+" player "+i+" "+Game.players.get(i).getX());
 							}
-							// System.out.println(Game.players);
-							// try { 
-							// 	Thread.sleep((long)100);
-							// } catch (InterruptedException e) {
-							// 	e.printStackTrace();
-							// }
-							// Game.players = (ArrayList<Player>) ois.readObject();
-
-						// }
 						
 					} catch (IOException e) {
 						e.printStackTrace();
