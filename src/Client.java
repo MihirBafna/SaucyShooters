@@ -12,7 +12,7 @@ import java.util.Scanner;
  */
 public class Client {
 	final static int ServerPort = 7777;
-	static int clientnumber;
+	static int clientnumber = 0;
 
 	/**
 	 * main method of the client Creates new game instance and two separate threads
@@ -38,14 +38,16 @@ public class Client {
 			public void run() {
 				while (true) {
 					try {
+						synchronized(Game.player){
+							oos.reset();
+							// write on the output stream
+							oos.writeObject(Game.player);
+						}
 						// boolean exit = false;
 						// if (Game.players.get(clientnumber).getHp() <= 0) {
 						// exit = true;
 						// }
 						// oos.writeBoolean(exit);
-						// write on the output stream
-						oos.reset();
-						oos.writeObject(Game.player);
 
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -61,26 +63,29 @@ public class Client {
 
 				while (true) {
 					try {
-						// read the data sent to this client
 						clientnumber = ois.readInt();
-						int size = ois.readInt();
-						int currsize = Game.players.size();
-						for (int i = 0; i < size - currsize; i++) {
-							Game.players.add(new Player());
-						}
-						for (int i = 0; i < size; i++) {
-							Player p = (Player) ois.readObject();
-							Game.players.set(i, p);
-							// System.out.println("Client "+clientnumber+" player "+i+" "+Game.players.get(i).getX());
-						}
-						// System.out.println(Game.players);
-						// try { 
-						// 	Thread.sleep((long)100);
-						// } catch (InterruptedException e) {
-						// 	e.printStackTrace();
-						// }
-						// Game.players = (ArrayList<Player>) ois.readObject();
+						// synchronized(Game.player){
+							// read the data sent to this client
+							int size = ois.readInt();
+							int currsize = Game.players.size();
+							for (int i = 0; i < size - currsize; i++) {
+								Game.players.add(new Player());
+							}
+							for (int i = 0; i < size; i++) {
+								Player p = (Player) ois.readObject();
+								Game.players.set(i, p);
+								// System.out.println("Client "+clientnumber+" player "+i+" "+Game.players.get(i).getX());
+							}
+							// System.out.println(Game.players);
+							// try { 
+							// 	Thread.sleep((long)100);
+							// } catch (InterruptedException e) {
+							// 	e.printStackTrace();
+							// }
+							// Game.players = (ArrayList<Player>) ois.readObject();
 
+						// }
+						
 					} catch (IOException e) {
 						e.printStackTrace();
 					} catch (ClassNotFoundException e) {

@@ -175,8 +175,12 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
 
         g.drawImage(background, -1920 / 2, -1080 / 2, null);
 
-        if(player.getDead()){
-            g.drawImage(dead, screenwidth/2, screenheight/2, 400, 250, null);
+        if(players.size()>0){
+            // System.out.println(Client.clientnumber+" " +players.get(Client.clientnumber).getDead());
+        }
+        if(players.size()>0 && players.get(Client.clientnumber).getDead()){
+            System.out.println("dead");
+            g.drawImage(dead, screenwidth/2, screenheight/2, 600, 400, null);
         }
 
         for (Item i : items) {
@@ -203,7 +207,6 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
                     }
                 }
             }
- 
         }
 
         g.setColor(Color.MAGENTA);

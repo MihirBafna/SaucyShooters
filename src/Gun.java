@@ -101,7 +101,7 @@ public class Gun extends Weapon {
      * @param playerY
      * creates bullets based on mouse position and player position
      */
-    public void shoot(double mouseX, double mouseY, double playerX, double playerY) {
+    public synchronized void shoot(double mouseX, double mouseY, double playerX, double playerY) {
         if (shootable) {
             shootable = false;
             if (!reloading) {
@@ -179,7 +179,7 @@ public class Gun extends Weapon {
     /**
      * removes bullets from arraylist if they expire
      */
-    public void deleteBullets() {
+    public synchronized void deleteBullets() {
         for (int i = 0; i < bullets.size(); i++) {
             if (bullets.get(i).expire()) {
                 bullets.remove(i);
@@ -193,6 +193,13 @@ public class Gun extends Weapon {
      */
     public void moveBullets() {
         for (Bullet b : bullets) {
+            for(int i = 0; i<Game.players.size();i++){
+                Player p = Game.players.get(i);
+                if(GameObject.collision(new Circle(b.getX(),b.getY(),b.getSize()/2),new Circle(p.getX(),p.getY(),50))&& i!=Client.clientnumber){
+                    System.out.println("in"+ p.getX()+ "b:"+b.getX()+" "+i);
+                    Game.players.get(i).setDead(true);
+                }
+            }
             b.move();
         }
     }
@@ -211,7 +218,7 @@ public class Gun extends Weapon {
     /**
      * updates bullets in arraylist
      */
-    public void update() {
+    public synchronized void update() {
         deleteBullets();
         moveBullets();
         // for (Bullet b : bullets) {

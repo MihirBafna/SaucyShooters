@@ -21,7 +21,7 @@ public class Player implements Serializable{
     private double speed;
     private double hp;
     private Color color;
-    private boolean dead = false;
+    private boolean dead;
     private double velX;
     private double velY;
     private int size = 100;
@@ -264,6 +264,7 @@ public class Player implements Serializable{
 
     public void setDead(boolean x) {
         this.dead = x;
+        System.out.println(Client.clientnumber+" " +Game.players.get(Client.clientnumber).getDead());
     }
 
     public void setVelX(double velX) {
