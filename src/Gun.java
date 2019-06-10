@@ -1,15 +1,17 @@
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import javafx.scene.shape.Circle;
 
-public class Gun extends Weapon {
+public class Gun extends Weapon implements Serializable{
 
-    private double range;
+    private static final long serialVersionUID = -2966481538980175825L;
+	private double range;
     private double rangeFallOff;
     private double damage;
     private double damageFallOff;
@@ -26,6 +28,7 @@ public class Gun extends Weapon {
     private boolean shootable;
     private boolean reloading;
 
+    
     /**
      * @param x
      * @param y

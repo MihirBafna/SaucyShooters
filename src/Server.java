@@ -114,13 +114,50 @@ class ClientHandler implements Runnable
 					break;
 				}
 				oos.writeInt(i) ;
-				Player p = (Player)this.ois.readObject();
+				Player p = getPlayer();
 				if(p.isWon()){
 					this.s.close();
 					break;
 				}
 				Server.players.set(i, p); 
 				// System.out.println(i+" "+Server.players.get(i).getX());
+				sendPlayers();
+				// System.out.println(Server.players);
+				// this.oos.writeObject(Server.players);
+
+
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			} 
+
+		}
+		try
+		{
+			// closing resources
+			this.ois.close();
+			this.oos.close();
+
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+
+	public synchronized Player getPlayer(){
+		try{
+			return (Player)this.ois.readObject();
+		}catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public synchronized void sendPlayers(){
+		try
+			{	
 				int size = Server.players.size();
 				this.oos.writeInt(size);
 				for(int j=0;j<size;j++){
@@ -135,20 +172,6 @@ class ClientHandler implements Runnable
 
 			} catch (IOException e) {
 				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-
-		}
-		try
-		{
-			// closing resources
-			this.ois.close();
-			this.oos.close();
-
-		}catch(IOException e){
-			e.printStackTrace();
-		}
+			} 
 	}
-
 }
