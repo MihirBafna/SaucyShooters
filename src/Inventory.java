@@ -1,9 +1,11 @@
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Inventory {
+public class Inventory implements Serializable {
 
     
+    private static final long serialVersionUID = -228417892005900847L;
     private ArrayList<Gun> guns;
     private ArrayList<Ammo> ammos;
     private ArrayList<Grenade> grenades;
@@ -13,19 +15,17 @@ public class Inventory {
     private int grenadeSlots;
 
     /**
-     * @param gunSlots
-     * @param ammoSlots
-     * @param grenadeSlots
+     * constructor
      * creates inventory with slots for each player
      */
-    public Inventory(int gunSlots, int ammoSlots, int grenadeSlots) {
+    public Inventory() {
         guns = new ArrayList<Gun>();
         ammos = new ArrayList<Ammo>();
         grenades = new ArrayList<Grenade>();
 
-        this.gunSlots = gunSlots;
-        this.ammoSlots = ammoSlots;
-        this.grenadeSlots = grenadeSlots;
+        this.gunSlots = 2;
+        this.ammoSlots = 3;
+        this.grenadeSlots = 2;
 
         nullify();
     }

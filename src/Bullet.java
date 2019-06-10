@@ -3,14 +3,16 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 
 import javax.imageio.ImageIO;
 
 // import javafx.*;
 import javafx.scene.shape.Circle;
 
-public class Bullet {
+public class Bullet implements Serializable{
 
+    private static final long serialVersionUID = -2349428033052770258L;
     private double initX;
     private double initY;
     private double x;
@@ -22,8 +24,19 @@ public class Bullet {
     private double velX;
     private double velY;
     private double size;
-    private Circle circle;
+    private transient Circle circle;
 
+    public Bullet(){
+        this.initX = Game.player.getX();
+        this.initY = Game.player.getY();
+        x = initX;
+        y = initY;
+        this.range = 600;
+        this.velX = 8;
+        this.velY = 8;
+        this.size = 15;
+        circle = new Circle(x, y, size / 2);
+    }
     /**
      * @param initX
      * @param initY

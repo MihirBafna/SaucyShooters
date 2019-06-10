@@ -3,6 +3,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -10,11 +11,12 @@ import javax.swing.JLabel;
 
 import javafx.scene.shape.Rectangle;
 
-public class Item {
+public class Item implements Serializable{
 
+    private static final long serialVersionUID = 1516961592569626166L;
     private double x;
     private double y;
-    private Point p;
+    private transient Point p;
     private String imgName;
     private double width;
     private double height;
@@ -22,7 +24,7 @@ public class Item {
     private ImageIcon img;
     private JLabel label;
     private boolean drawn;
-    private Rectangle rectangle;
+    private transient Rectangle rectangle;
     protected int index;
 
     public Item() {

@@ -49,7 +49,6 @@ public class Server
 			// Create a new handler object for handling this request.
 			players.add(new Player()); 
 			ClientHandler mtch = new ClientHandler(s,i, ois, oos);
-
 			// Create a new Thread with this object.
 			Thread t = new Thread(mtch);
 
@@ -114,8 +113,8 @@ class ClientHandler implements Runnable
 				if (exit){
 					break;
 				}
+				oos.writeInt(i) ;
 				Player p = (Player)this.ois.readObject();
-				System.out.println(p.getX());
 				Server.players.set(i, p); 
 				// System.out.println(i+" "+Server.players.get(i).getX());
 				int size = Server.players.size();

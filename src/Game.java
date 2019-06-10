@@ -196,9 +196,14 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
         for(int i = 0; i<players.size();i++){
             Player p = players.get(i);
             if(GameObject.collision(screen,new Circle(p.getX(),p.getY(),50))&& i!=Client.clientnumber){
-                System.out.println(p.getX());
-                p.drawImage(g,(int)p.getX()-50,(int)p.getY()-50);
+                p.drawImage(g,(int)p.getX(),(int)p.getY());
+                for (Gun gun : p.getInventory().getGuns()) {
+                    if (gun != null) {
+                        gun.drawBullets(g, p.getColor());
+                    }
+                }
             }
+ 
         }
 
         g.setColor(Color.MAGENTA);

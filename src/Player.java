@@ -26,13 +26,12 @@ public class Player implements Serializable{
     private double velY;
     private int size = 100;
     private double theta = 0;
-    private transient Circle circle;
-    private transient Inventory inventory;
-    private transient Weapon equippedWeapon;
-
     private String imgName = "NEWCHARACTER4.png";
-
     private int score;
+    private transient Circle circle;
+    private Inventory inventory;
+    private Weapon equippedWeapon;
+
 
 
     public Player(){
@@ -59,7 +58,7 @@ public class Player implements Serializable{
         this.color = color;
         score = 0;
         circle = new Circle(x, y, size / 2);
-        inventory = new Inventory(2, 3, 2);
+        inventory = new Inventory();
         equippedWeapon = null;
     }
 
