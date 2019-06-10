@@ -9,8 +9,7 @@ import java.net.*;
  */
 public class Server
 {
-	static ArrayList<Point> playerPos = new ArrayList<Point>();
-
+	static ArrayList<Player> players = new ArrayList<Player>();
 	// Vector to store active clients
 	static Vector<ClientHandler> ar = new Vector<>();
 	private static final Random random = new Random();
@@ -41,15 +40,15 @@ public class Server
 
 			System.out.println("New client request received : " + s);
 
-			playerPos.add(new Point());
 			// obtain input and output streams
-			DataInputStream dis = new DataInputStream(s.getInputStream());
-			DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+			ObjectOutputStream oos = new ObjectOutputStream(s.getOutputStream());
+			ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
 
 			System.out.println("Creating a new handler for this client...");
 
 			// Create a new handler object for handling this request.
-			ClientHandler mtch = new ClientHandler(s,i, dis, dos);
+			players.add(new Player()); 
+			ClientHandler mtch = new ClientHandler(s,i, ois, oos);
 
 			// Create a new Thread with this object.
 			Thread t = new Thread(mtch);
@@ -58,7 +57,6 @@ public class Server
 
 			// add this client to active clients list
 			ar.add(mtch);
-
 			// start the thread.
 			t.start();
 
@@ -78,24 +76,23 @@ class ClientHandler implements Runnable
 {
 	Scanner scn = new Scanner(System.in);
 	int i;
-	final DataInputStream dis;
-	final DataOutputStream dos;
+	final ObjectInputStream ois;
+	final ObjectOutputStream oos;
 	Socket s;
 	boolean isloggedin;
-	public static ArrayList<Integer> deadPlayers = new ArrayList<Integer>();
 
 
 	/**
 	 * Constructor
 	 * @param Socket
 	 * @param int
-	 * @param DataInputStream
-	 * @param DataOutputStream
+	 * @param ObjectInputStream
+	 * @param ObjectOutputStream
 	 */
 	public ClientHandler(Socket s, int i,
-							DataInputStream dis, DataOutputStream dos) {
-		this.dis = dis;
-		this.dos = dos;
+							ObjectInputStream ois, ObjectOutputStream oos) {
+		this.ois = ois;
+		this.oos = oos;
 		this.i = i;
 		this.s = s;
 		this.isloggedin=true;
@@ -106,37 +103,36 @@ class ClientHandler implements Runnable
 	*/
 	@Override
 	public void run() {
-		double receivedX;
-		double receivedY;
-		int deadsize = 0;
+		
 		while (true)
 		{
 			try
-			{
-				receivedX = dis.readDouble();
-				receivedY = dis.readDouble();
-				
-				Server.playerPos.set(i,new Point((int)receivedX,(int)receivedY));
-				// deadsize = dis.readInt();
-				// for(int k = 0; k<deadsize;k++){
-				// 	deadPlayers.add(dis.readInt());
-				// }
-				this.dos.writeInt(Server.i);
-				this.dos.writeInt(this.i);
-				for(int j =0; j<Server.i;j++){
-					this.dos.writeDouble(Server.playerPos.get(j).getX());
-					this.dos.writeDouble(Server.playerPos.get(j).getY());
-				}
-				// this.dos.writeInt(deadPlayers.size());
-				// for (int k = 0; k < deadPlayers.size(); k++) {
-				// 	this.dos.writeInt(deadPlayers.get(k).intValue());
-				// }
-				if(receivedX == -1){
+			{	
+				// if the player wants to exit
+				// boolean exit = this.ois.readBoolean();
+				boolean exit = false;
+				if (exit){
 					break;
 				}
+				Player p = (Player)this.ois.readObject();
+				System.out.println(p.getX());
+				Server.players.set(i, p); 
+				// System.out.println(i+" "+Server.players.get(i).getX());
+				int size = Server.players.size();
+				this.oos.writeInt(size);
+				for(int j=0;j<size;j++){
+					this.oos.reset();
+					this.oos.writeObject(Server.players.get(j));
+					// System.out.println(j+" "+Server.players.get(j).getX());
+				}
+				// System.out.println(Server.players);
+				// this.oos.writeObject(Server.players);
+
+
 
 			} catch (IOException e) {
-
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
 
@@ -144,11 +140,12 @@ class ClientHandler implements Runnable
 		try
 		{
 			// closing resources
-			this.dis.close();
-			this.dos.close();
+			this.ois.close();
+			this.oos.close();
 
 		}catch(IOException e){
 			e.printStackTrace();
 		}
 	}
+
 }

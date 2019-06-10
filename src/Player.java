@@ -8,13 +8,14 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.io.File;
 import java.io.IOException;
-
+import java.io.Serializable;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javafx.scene.shape.Circle;
 
-public class Player {
+public class Player implements Serializable{
+	private static final long serialVersionUID = -2993316011764722030L;
     private double x;
     private double y;
     private double speed;
@@ -25,13 +26,22 @@ public class Player {
     private double velY;
     private int size = 100;
     private double theta = 0;
-    private Circle circle;
-    private Inventory inventory;
-    private Weapon equippedWeapon;
+    private transient Circle circle;
+    private transient Inventory inventory;
+    private transient Weapon equippedWeapon;
 
     private String imgName = "NEWCHARACTER4.png";
 
     private int score;
+
+
+    public Player(){
+        this.x = Game.screenwidth / 2;
+        this.y = Game.screenwidth / 2;
+        this.speed = 3.0;
+        this.hp = 15.0;
+        this.color = Color.BLACK;
+    }
 
     /**
      * @param imgName
@@ -120,6 +130,19 @@ public class Player {
         g2d.setTransform(backup);
     }
 
+    public void drawImage(Graphics g, int x, int y) {
+        int drawX = x;
+        int drawY = y;
+        Image image = null;
+        try {
+            image = ImageIO.read(new File("img/" + imgName));
+        } catch (IOException e) {
+            System.out.println("ERROR");
+            e.printStackTrace();
+        }
+        g.drawImage(image, drawX - (size / 2), drawY - (size / 2), null);
+    }
+
     // public void rotate() {
     // double rotationRequired = Math.toRadians (theta);
     // double rotateX = size / 2;
@@ -160,12 +183,10 @@ public class Player {
      * opens up crates
      */
     public void openCrate() {
-        int index = -1;
         for (Item c : Game.items) {
             if (c instanceof Crate) {
                 if (GameObject.collision(circle, c.getRectangle())) {
                     score++;
-                    index = c.getIndex();
                     Game.objects.remove(c.getRectangle());
                     Game.items.remove(c);
                     Weapon w = ((Crate) c).generateWeapon();

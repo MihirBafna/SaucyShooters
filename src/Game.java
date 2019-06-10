@@ -46,6 +46,7 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
     public static int screenheight = 600;
     public static int displayX = 0;
     public static int displayY = 0;
+	public static ArrayList<Player> players = new ArrayList<Player>();
 
     public static Player player;
 
@@ -191,14 +192,15 @@ public class Game extends JPanel implements ActionListener, KeyListener, MouseLi
                 gun.drawBullets(g, player.getColor());
             }
         }
-        for(int i = 0; i<Client.playerPos.size();i++){
-            double x =Client.playerPos.get(i).getX();
-            double y = Client.playerPos.get(i).getY();
-            if(GameObject.collision(screen, new Circle(x,y, 50))&&i!=Client.clientnumber){
-                Item n = new Item(x -50 , y- 50, "NEWCHARACTER4.png", 100, 100);
-                n.drawImage(g);
+
+        for(int i = 0; i<players.size();i++){
+            Player p = players.get(i);
+            if(GameObject.collision(screen,new Circle(p.getX(),p.getY(),50))&& i!=Client.clientnumber){
+                System.out.println(p.getX());
+                p.drawImage(g,(int)p.getX()-50,(int)p.getY()-50);
             }
         }
+
         g.setColor(Color.MAGENTA);
         g.setColor(Color.black);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
